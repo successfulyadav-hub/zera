@@ -21,6 +21,16 @@ import { requestNotificationPermissions, useNotificationResponse } from '@/utils
 
 if (Platform.OS === 'web') {
   LogBox.ignoreAllLogs(true);
+  if (typeof window !== 'undefined') {
+    window.addEventListener('unhandledrejection', (e) => {
+      e.preventDefault();
+    });
+    window.addEventListener('error', (e) => {
+      if (e.message?.includes?.('expo-sqlite') || e.message === 'Unknown') {
+        e.preventDefault();
+      }
+    });
+  }
 }
 
 SplashScreen.preventAutoHideAsync();

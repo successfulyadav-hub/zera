@@ -3,4 +3,15 @@ const config = getDefaultConfig(__dirname);
 
 config.resolver.assetExts = [...(config.resolver.assetExts || []), 'wasm'];
 
+config.server = {
+  ...config.server,
+  enhanceMiddleware: (middleware) => {
+    return (req, res, next) => {
+      res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+      res.setHeader('Cross-Origin-Embedder-Policy', 'credentialless');
+      return middleware(req, res, next);
+    };
+  },
+};
+
 module.exports = config;
