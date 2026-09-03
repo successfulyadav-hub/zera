@@ -34,7 +34,10 @@ export default function RootLayout() {
   useEffect(() => {
     initDatabase()
       .then(() => setDbReady(true))
-      .catch((e) => console.error('DB Init Error', e));
+      .catch((e) => {
+        console.warn('DB Init Error:', e);
+        setDbReady(true);
+      });
     loadSettings();
     initAuth();
     requestNotificationPermissions();
