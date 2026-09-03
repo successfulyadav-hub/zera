@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import * as Network from 'expo-network';
 import { Text } from '@/components/ui';
@@ -10,9 +10,24 @@ export function NetworkStatus() {
   const translateY = useSharedValue(-40);
 
   useEffect(() => {
+    if (Platform.OS === 'web') {
+      const update = () => setIsConnected(navigator.onLine);
+      window.addEventListener('online', update);
+      window.addEventListener('offline', update);
+      update();
+      return () => {
+        window.removeEventListener('online', update);
+        window.removeEventListener('offline', update);
+      };
+    }
+
     const check = async () => {
-      const state = await Network.getNetworkStateAsync();
-      setIsConnected(state.isConnected ?? true);
+      try {
+        const state = await Network.getNetworkStateAsync();
+        setIsConnected(state.isConnected ?? true);
+      } catch {
+        setIsConnected(true);
+      }
     };
 
     check();

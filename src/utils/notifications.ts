@@ -1,9 +1,11 @@
+import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 
 const isExpoGo = Constants.appOwnership === 'expo';
+const isUnsupported = isExpoGo || Platform.OS === 'web';
 
-if (!isExpoGo) {
+if (!isUnsupported) {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
@@ -16,7 +18,7 @@ if (!isExpoGo) {
 }
 
 export async function requestNotificationPermissions(): Promise<boolean> {
-  if (isExpoGo) return false;
+  if (isUnsupported) return false;
   try {
     const { status: existing } = await Notifications.getPermissionsAsync();
     if (existing === 'granted') return true;
@@ -34,7 +36,7 @@ export async function scheduleReminderNotification(
   date: string,
   time: string,
 ): Promise<string | null> {
-  if (isExpoGo) return null;
+  if (isUnsupported) return null;
   try {
     const hasPermission = await requestNotificationPermissions();
     if (!hasPermission) return null;
@@ -70,7 +72,7 @@ export async function scheduleTaskNotification(
   date: string,
   dueTime: string,
 ): Promise<string | null> {
-  if (isExpoGo) return null;
+  if (isUnsupported) return null;
   try {
     const hasPermission = await requestNotificationPermissions();
     if (!hasPermission) return null;
@@ -102,19 +104,19 @@ export async function scheduleTaskNotification(
 
 export function useNotificationResponse() {
   const response = Notifications.useLastNotificationResponse();
-  if (isExpoGo) return null;
+  if (isUnsupported) return null;
   return response;
 }
 
 export async function cancelNotification(notificationId: string): Promise<void> {
-  if (isExpoGo) return;
+  if (isUnsupported) return;
   try {
     await Notifications.cancelScheduledNotificationAsync(notificationId);
   } catch {}
 }
 
 export async function cancelAllNotifications(): Promise<void> {
-  if (isExpoGo) return;
+  if (isUnsupported) return;
   try {
     await Notifications.cancelAllScheduledNotificationsAsync();
   } catch {}
