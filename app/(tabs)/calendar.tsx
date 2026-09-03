@@ -125,6 +125,7 @@ export default function CalendarScreen() {
           month={currentMonth}
           selectedDate={selectedDate}
           onSelectDate={handleSelectDate}
+          onOpenDay={(d) => router.push(`/day/${formatDateKey(d)}`)}
           onPrevMonth={() => setCurrentMonth((m) => subMonths(m, 1))}
           onNextMonth={() => setCurrentMonth((m) => addMonths(m, 1))}
           eventDots={eventDots}

@@ -38,16 +38,16 @@ const styles = StyleSheet.create({
   content: {
     borderTopLeftRadius: radius.xl,
     borderTopRightRadius: radius.xl,
-    padding: spacing.lg,
-    paddingBottom: spacing.xxl,
+    padding: spacing.xxl,
+    paddingBottom: 36,
     maxHeight: '90%',
   },
   handle: {
-    width: 40,
+    width: 36,
     height: 4,
     borderRadius: 2,
     alignSelf: 'center',
-    marginBottom: spacing.lg,
-    opacity: 0.3,
+    marginBottom: spacing.xl,
+    opacity: 0.2,
   },
 });

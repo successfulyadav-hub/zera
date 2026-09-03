@@ -14,6 +14,7 @@ interface SwipeableCalendarProps {
   month: Date;
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
+  onOpenDay?: (date: Date) => void;
   onPrevMonth: () => void;
   onNextMonth: () => void;
   eventDots?: Set<string>;
@@ -24,6 +25,7 @@ export function SwipeableCalendar({
   month,
   selectedDate,
   onSelectDate,
+  onOpenDay,
   onPrevMonth,
   onNextMonth,
   eventDots,
@@ -70,6 +72,7 @@ export function SwipeableCalendar({
           month={month}
           selectedDate={selectedDate}
           onSelectDate={onSelectDate}
+          onOpenDay={onOpenDay}
           eventDots={eventDots}
           taskDots={taskDots}
         />

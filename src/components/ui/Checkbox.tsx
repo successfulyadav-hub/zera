@@ -10,7 +10,7 @@ export interface CheckboxProps {
   size?: number;
 }
 
-export function Checkbox({ checked, onCheckedChange, size = 24 }: CheckboxProps) {
+export function Checkbox({ checked, onCheckedChange, size = 22 }: CheckboxProps) {
   const { colors } = useTheme();
 
   const handlePress = () => {
@@ -32,7 +32,7 @@ export function Checkbox({ checked, onCheckedChange, size = 24 }: CheckboxProps)
       accessibilityRole="checkbox"
       accessibilityState={{ checked }}
     >
-      <Animated.View style={[styles.box, { width: size, height: size, borderRadius: size / 3 }, animatedStyle]}>
+      <Animated.View style={[styles.box, { width: size, height: size, borderRadius: size / 2 }, animatedStyle]}>
         {checked && <Check color="#FFFFFF" size={size * 0.7} strokeWidth={3} />}
       </Animated.View>
     </TouchableOpacity>
@@ -41,7 +41,7 @@ export function Checkbox({ checked, onCheckedChange, size = 24 }: CheckboxProps)
 
 const styles = StyleSheet.create({
   box: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     justifyContent: 'center',
     alignItems: 'center',
   },

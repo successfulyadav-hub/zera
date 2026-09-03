@@ -68,13 +68,13 @@ const styles = StyleSheet.create({
   progressRow: { flexDirection: 'row' },
   progressBg: {
     flex: 1,
-    height: 4,
-    borderRadius: 2,
+    height: 5,
+    borderRadius: 3,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    borderRadius: 2,
+    borderRadius: 3,
   },
   eventStat: {
     alignItems: 'center',

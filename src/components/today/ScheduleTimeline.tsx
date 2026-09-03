@@ -100,8 +100,9 @@ const styles = StyleSheet.create({
   },
   dividerLine: {
     width: 3,
-    borderRadius: 1.5,
+    borderRadius: 2,
     marginHorizontal: spacing.md,
+    minHeight: 40,
   },
   eventContent: {
     flex: 1,

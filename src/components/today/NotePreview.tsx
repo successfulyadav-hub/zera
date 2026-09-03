@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.screenPaddingH,
     paddingBottom: spacing.xxl,
   },
-  card: { minHeight: 80, justifyContent: 'center' },
+  card: { minHeight: 72, justifyContent: 'center' },
   label: { marginBottom: spacing.xs },
 });

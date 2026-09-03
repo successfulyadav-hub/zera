@@ -1,8 +1,26 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+  withSpring,
+} from 'react-native-reanimated';
 import { Text } from '@/components/ui';
 import { spacing } from '@/theme';
 import { useTheme } from '@/hooks/useTheme';
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay, isToday } from 'date-fns';
+import { hapticSelection } from '@/utils/haptics';
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  addDays,
+  isSameMonth,
+  isSameDay,
+  isToday,
+} from 'date-fns';
 
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
@@ -10,11 +28,93 @@ interface CalendarGridProps {
   month: Date;
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
+  onOpenDay?: (date: Date) => void;
   eventDots?: Set<string>;
   taskDots?: Set<string>;
 }
 
-export function CalendarGrid({ month, selectedDate, onSelectDate, eventDots, taskDots }: CalendarGridProps) {
+function DayCell({
+  day,
+  month,
+  selected,
+  onPress,
+  eventDot,
+  taskDot,
+}: {
+  day: Date;
+  month: Date;
+  selected: boolean;
+  onPress: () => void;
+  eventDot: boolean;
+  taskDot: boolean;
+}) {
+  const { colors } = useTheme();
+  const scale = useSharedValue(1);
+  const inMonth = isSameMonth(day, month);
+  const today = isToday(day);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const handlePress = () => {
+    scale.value = withSequence(
+      withTiming(0.82, { duration: 60 }),
+      withSpring(1, { damping: 10, stiffness: 300 }),
+    );
+    onPress();
+  };
+
+  return (
+    <TouchableOpacity style={styles.cell} activeOpacity={1} onPress={handlePress}>
+      <Animated.View
+        style={[
+          styles.dayCircle,
+          selected && { backgroundColor: colors.sage },
+          today && !selected && { borderWidth: 1.5, borderColor: colors.sage },
+          animatedStyle,
+        ]}
+      >
+        <Text
+          variant="bodySmall"
+          align="center"
+          color={
+            selected ? '#FFFFFF' : !inMonth ? colors.stone + '40' : colors.ink
+          }
+        >
+          {format(day, 'd')}
+        </Text>
+      </Animated.View>
+      <View style={styles.dotsRow}>
+        {eventDot && (
+          <View
+            style={[
+              styles.dot,
+              { backgroundColor: selected ? colors.sageSoft : colors.sage },
+            ]}
+          />
+        )}
+        {taskDot && (
+          <View
+            style={[
+              styles.dot,
+              { backgroundColor: selected ? colors.sageSoft : colors.stone },
+            ]}
+          />
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+export function CalendarGrid({
+  month,
+  selectedDate,
+  onSelectDate,
+  onOpenDay,
+  eventDots,
+  taskDots,
+}: CalendarGridProps) {
   const { colors } = useTheme();
 
   const monthStart = startOfMonth(month);
@@ -33,54 +133,40 @@ export function CalendarGrid({ month, selectedDate, onSelectDate, eventDots, tas
     weeks.push(week);
   }
 
+  const handlePress = (d: Date) => {
+    if (isSameDay(d, selectedDate) && onOpenDay) {
+      onOpenDay(d);
+      return;
+    }
+    hapticSelection();
+    onSelectDate(d);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.weekdayRow}>
         {WEEKDAYS.map((d, i) => (
           <View key={i} style={styles.cell}>
-            <Text variant="caption" color={colors.stone} align="center">{d}</Text>
+            <Text variant="caption" color={colors.stone} align="center">
+              {d}
+            </Text>
           </View>
         ))}
       </View>
       {weeks.map((week, wi) => (
         <View key={wi} style={styles.weekRow}>
           {week.map((d) => {
-            const inMonth = isSameMonth(d, month);
-            const selected = isSameDay(d, selectedDate);
-            const today = isToday(d);
             const dateKey = format(d, 'yyyy-MM-dd');
-            const hasEvent = eventDots?.has(dateKey);
-            const hasTask = taskDots?.has(dateKey);
-
             return (
-              <TouchableOpacity
+              <DayCell
                 key={dateKey}
-                style={styles.cell}
-                activeOpacity={0.7}
-                onPress={() => onSelectDate(d)}
-              >
-                <View style={[
-                  styles.dayCircle,
-                  selected && { backgroundColor: colors.sage },
-                  today && !selected && { borderWidth: 1, borderColor: colors.sage },
-                ]}>
-                  <Text
-                    variant="bodySmall"
-                    align="center"
-                    color={
-                      selected ? '#FFFFFF' :
-                      !inMonth ? colors.divider :
-                      colors.ink
-                    }
-                  >
-                    {format(d, 'd')}
-                  </Text>
-                </View>
-                <View style={styles.dotsRow}>
-                  {hasEvent && <View style={[styles.dot, { backgroundColor: selected ? colors.sageSoft : colors.sage }]} />}
-                  {hasTask && <View style={[styles.dot, { backgroundColor: selected ? colors.sageSoft : colors.stone }]} />}
-                </View>
-              </TouchableOpacity>
+                day={d}
+                month={month}
+                selected={isSameDay(d, selectedDate)}
+                onPress={() => handlePress(d)}
+                eventDot={eventDots?.has(dateKey) ?? false}
+                taskDot={taskDots?.has(dateKey) ?? false}
+              />
             );
           })}
         </View>
@@ -96,19 +182,19 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.xs + 2,
   },
   dayCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     justifyContent: 'center',
     alignItems: 'center',
   },
   dotsRow: {
     flexDirection: 'row',
     gap: 3,
-    marginTop: 2,
+    marginTop: 3,
     height: 4,
   },
   dot: {
