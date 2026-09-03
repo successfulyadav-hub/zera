@@ -1,0 +1,26 @@
+export const colors = {
+  light: {
+    bg:         '#F8F6F1',
+    surface:    '#EFEDE6',
+    ink:        '#1A1A1A',
+    stone:      '#8C8780',
+    sage:       '#7B8F7A',
+    sageSoft:   '#E8EDE7',
+    divider:    'rgba(140, 135, 128, 0.15)',
+    shadow:     'rgba(30, 28, 24, 0.08)',
+    shadowDeep: 'rgba(30, 28, 24, 0.16)',
+    error:      '#BF6B5A',
+  },
+  dark: {
+    bg:         '#1C1B19',
+    surface:    '#242320',
+    ink:        '#E8E5DE',
+    stone:      '#9C9890',
+    sage:       '#8FA88E',
+    sageSoft:   '#2A2E29',
+    divider:    'rgba(200, 195, 188, 0.10)',
+    shadow:     'rgba(0, 0, 0, 0.25)',
+    shadowDeep: 'rgba(0, 0, 0, 0.45)',
+    error:      '#D4877A',
+  },
+} as const;
