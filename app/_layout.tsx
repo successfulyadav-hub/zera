@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { LogBox, Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import { useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
@@ -17,6 +18,10 @@ import { UndoToast } from '@/components/ui/UndoToast';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { NetworkStatus } from '@/components/shared/NetworkStatus';
 import { requestNotificationPermissions, useNotificationResponse } from '@/utils/notifications';
+
+if (Platform.OS === 'web') {
+  LogBox.ignoreAllLogs(true);
+}
 
 SplashScreen.preventAutoHideAsync();
 
