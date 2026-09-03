@@ -5,11 +5,15 @@ interface SettingsStore {
   darkMode: 'system' | 'light' | 'dark';
   hapticsEnabled: boolean;
   notificationsEnabled: boolean;
+  customBgColor: string | null;
+  customAccentColor: string | null;
   loaded: boolean;
   load: () => Promise<void>;
   setDarkMode: (mode: 'system' | 'light' | 'dark') => Promise<void>;
   setHaptics: (enabled: boolean) => Promise<void>;
   setNotifications: (enabled: boolean) => Promise<void>;
+  setCustomBgColor: (color: string | null) => Promise<void>;
+  setCustomAccentColor: (color: string | null) => Promise<void>;
 }
 
 const SETTINGS_KEY = 'zera_settings';
@@ -18,6 +22,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   darkMode: 'system',
   hapticsEnabled: true,
   notificationsEnabled: true,
+  customBgColor: null,
+  customAccentColor: null,
   loaded: false,
   load: async () => {
     try {
@@ -44,9 +50,17 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     set({ notificationsEnabled: enabled });
     await persist(get());
   },
+  setCustomBgColor: async (color) => {
+    set({ customBgColor: color });
+    await persist(get());
+  },
+  setCustomAccentColor: async (color) => {
+    set({ customAccentColor: color });
+    await persist(get());
+  },
 }));
 
 async function persist(state: SettingsStore) {
-  const { darkMode, hapticsEnabled, notificationsEnabled } = state;
-  await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify({ darkMode, hapticsEnabled, notificationsEnabled }));
+  const { darkMode, hapticsEnabled, notificationsEnabled, customBgColor, customAccentColor } = state;
+  await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify({ darkMode, hapticsEnabled, notificationsEnabled, customBgColor, customAccentColor }));
 }

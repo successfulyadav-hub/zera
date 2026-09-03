@@ -3,6 +3,7 @@ import { View, StyleSheet, Switch, ScrollView, TouchableOpacity, ActivityIndicat
 import { useRouter } from 'expo-router';
 import { LogOut, RefreshCw, User, Trash2, Download } from 'lucide-react-native';
 import { ScreenHeader } from '@/components/shared/ScreenHeader';
+import { ColorPicker } from '@/components/settings/ColorPicker';
 import { Text, Card, Divider, Button, ConfirmDialog } from '@/components/ui';
 import { useTheme } from '@/hooks/useTheme';
 import { useSettingsStore } from '@/stores/useSettingsStore';
@@ -18,7 +19,7 @@ import { hapticLight } from '@/utils/haptics';
 export default function SettingsScreen() {
   const { colors } = useTheme();
   const router = useRouter();
-  const { darkMode, setDarkMode, hapticsEnabled, setHaptics, notificationsEnabled, setNotifications } = useSettingsStore();
+  const { darkMode, setDarkMode, hapticsEnabled, setHaptics, notificationsEnabled, setNotifications, customBgColor, setCustomBgColor, customAccentColor, setCustomAccentColor } = useSettingsStore();
   const { user, session, signOut } = useAuthStore();
   const { syncing, lastSync, triggerSync } = useSync();
   const toast = useToast();
@@ -154,6 +155,26 @@ export default function SettingsScreen() {
               ))}
             </View>
           </View>
+
+          <Divider style={styles.divider} />
+
+          <ColorPicker
+            label="Accent Color"
+            currentColor={customAccentColor}
+            defaultColor="#7B8F7A"
+            onColorChange={setCustomAccentColor}
+            mode="accent"
+          />
+
+          <Divider style={styles.divider} />
+
+          <ColorPicker
+            label="Background Color"
+            currentColor={customBgColor}
+            defaultColor="#F8F6F1"
+            onColorChange={setCustomBgColor}
+            mode="background"
+          />
         </Card>
 
         <Card style={styles.card}>
