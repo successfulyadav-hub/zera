@@ -33,12 +33,13 @@ export function FAB({ onPress }: FABProps) {
 const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
-    bottom: 24,
+    bottom: 96,
     right: 24,
     width: 56,
     height: 56,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 10,
   },
 });
