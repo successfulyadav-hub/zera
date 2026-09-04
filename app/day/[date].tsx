@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react-native';
@@ -51,7 +51,6 @@ export default function DayScreen() {
   );
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
-  const hasLoaded = useRef(false);
   const dateString = formatDateKey(currentDate);
 
   const { tasks, loadTasks, addTask, toggleComplete, deleteTask, updatePriority } =
@@ -60,11 +59,11 @@ export default function DayScreen() {
   const { notes, loadNotes } = useNoteStore();
 
   useEffect(() => {
+    setLoading(true);
     Promise.all([loadTasks(dateString), loadEvents(dateString), loadNotes(dateString)]).then(() => {
-      if (!hasLoaded.current) {
-        hasLoaded.current = true;
-        setLoading(false);
-      }
+      setLoading(false);
+    }).catch(() => {
+      setLoading(false);
     });
   }, [dateString]);
 

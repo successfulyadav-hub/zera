@@ -30,7 +30,7 @@ export function TaskSection({ tasks, onToggleTask, onAddTask, onDeleteTask, onEd
   useEffect(() => {
     const ids = tasks.map(t => t.id);
     if (ids.length > 0) {
-      subtasksQuery.getCountsByTaskIds(ids).then(setSubtaskCounts);
+      subtasksQuery.getCountsByTaskIds(ids).then(setSubtaskCounts).catch(() => {});
     } else {
       setSubtaskCounts({});
     }

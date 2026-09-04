@@ -58,10 +58,10 @@ export default function CalendarScreen() {
     const month = currentMonth.getMonth() + 1;
     eventsQuery.getByMonth(year, month).then((data) => {
       setEventDots(new Set(data.map((d) => d.date)));
-    });
+    }).catch(() => {});
     tasksQuery.getByMonth(year, month).then((data) => {
       setTaskDots(new Set(data.map((d) => d.date)));
-    });
+    }).catch(() => {});
   }, [currentMonth]);
 
   const handleSelectDate = (date: Date) => {
