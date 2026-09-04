@@ -4,6 +4,7 @@ import { getDB } from '@/database/connection';
 const TABLES = ['events', 'tasks', 'notes', 'reminders'] as const;
 
 export async function pushChanges(userId: string): Promise<number> {
+  if (!supabase) return 0;
   const db = await getDB();
   let pushed = 0;
 
@@ -33,6 +34,7 @@ export async function pushChanges(userId: string): Promise<number> {
 }
 
 export async function pullChanges(userId: string): Promise<number> {
+  if (!supabase) return 0;
   const db = await getDB();
   let pulled = 0;
 

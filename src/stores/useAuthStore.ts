@@ -25,19 +25,23 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   initialize: async () => {
     try {
-      const [{ data }, onboardingRaw] = await Promise.all([
-        supabase.auth.getSession(),
-        AsyncStorage.getItem(ONBOARDING_KEY),
-      ]);
+      const onboardingRaw = await AsyncStorage.getItem(ONBOARDING_KEY);
+      let session: Session | null = null;
+
+      if (supabase) {
+        const { data } = await supabase.auth.getSession();
+        session = data.session;
+
+        supabase.auth.onAuthStateChange((_event, s) => {
+          set({ session: s, user: s?.user ?? null });
+        });
+      }
+
       set({
-        session: data.session,
-        user: data.session?.user ?? null,
+        session,
+        user: session?.user ?? null,
         hasSeenOnboarding: onboardingRaw === 'true',
         loading: false,
-      });
-
-      supabase.auth.onAuthStateChange((_event, session) => {
-        set({ session, user: session?.user ?? null });
       });
     } catch {
       set({ loading: false });
@@ -45,19 +49,21 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   signUp: async (email, password) => {
+    if (!supabase) return { error: 'Cloud sync not configured' };
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) return { error: error.message };
     return { error: null };
   },
 
   signIn: async (email, password) => {
+    if (!supabase) return { error: 'Cloud sync not configured' };
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return { error: error.message };
     return { error: null };
   },
 
   signOut: async () => {
-    await supabase.auth.signOut();
+    if (supabase) await supabase.auth.signOut();
     set({ session: null, user: null });
   },
 
