@@ -12,8 +12,12 @@ interface EventStore {
 export const useEventStore = create<EventStore>((set) => ({
   events: [],
   loadEvents: async (date) => {
-    const data = await eventsQuery.getByDate(date);
-    set({ events: data });
+    try {
+      const data = await eventsQuery.getByDate(date);
+      set({ events: data });
+    } catch (e) {
+      console.warn('Failed to load events:', e);
+    }
   },
   addEvent: async (event) => {
     await eventsQuery.create(event);

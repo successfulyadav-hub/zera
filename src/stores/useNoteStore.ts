@@ -15,12 +15,20 @@ export const useNoteStore = create<NoteStore>((set) => ({
   notes: [],
   allNotes: [],
   loadNotes: async (date) => {
-    const data = await notesQuery.getByDate(date);
-    set({ notes: data });
+    try {
+      const data = await notesQuery.getByDate(date);
+      set({ notes: data });
+    } catch (e) {
+      console.warn('Failed to load notes:', e);
+    }
   },
   loadAllNotes: async () => {
-    const data = await notesQuery.getAll();
-    set({ allNotes: data });
+    try {
+      const data = await notesQuery.getAll();
+      set({ allNotes: data });
+    } catch (e) {
+      console.warn('Failed to load all notes:', e);
+    }
   },
   saveNote: async (date, content, title, pageNumber = 1) => {
     const id = await notesQuery.save(date, content, title, pageNumber);

@@ -1,10 +1,11 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { addMonths, subMonths, isToday as checkIsToday } from 'date-fns';
 import { SwipeableCalendar } from '@/components/calendar/SwipeableCalendar';
 import { ScreenHeader } from '@/components/shared/ScreenHeader';
+import { ListSkeleton } from '@/components/shared/Skeleton';
 import { ScheduleTimeline } from '@/components/today/ScheduleTimeline';
 import { TaskSection } from '@/components/today/TaskSection';
 import { TaskEditModal } from '@/components/tasks/TaskEditModal';
@@ -34,6 +35,8 @@ export default function CalendarScreen() {
   const [eventDots, setEventDots] = useState<Set<string>>(new Set());
   const [taskDots, setTaskDots] = useState<Set<string>>(new Set());
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [loading, setLoading] = useState(true);
+  const hasLoaded = useRef(false);
 
   const dateString = formatDateKey(selectedDate);
   const { events, loadEvents } = useEventStore();
@@ -41,8 +44,12 @@ export default function CalendarScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      loadEvents(dateString);
-      loadTasks(dateString);
+      Promise.all([loadEvents(dateString), loadTasks(dateString)]).then(() => {
+        if (!hasLoaded.current) {
+          hasLoaded.current = true;
+          setLoading(false);
+        }
+      });
     }, [dateString])
   );
 
@@ -138,6 +145,14 @@ export default function CalendarScreen() {
               {friendlyDate(selectedDate)}
             </Text>
           </TouchableOpacity>
+          {loading ? (
+            <View style={{ paddingHorizontal: layout.screenPaddingH }}>
+              <ListSkeleton count={2} type="event" />
+              <View style={{ height: spacing.lg }} />
+              <ListSkeleton count={2} type="task" />
+            </View>
+          ) : (
+          <>
           <ScheduleTimeline events={events} />
           <TaskSection
             tasks={tasks}
@@ -155,6 +170,8 @@ export default function CalendarScreen() {
             onEditTask={setEditingTask}
             swipeable
           />
+          </>
+          )}
         </View>
       </ScrollView>
 

@@ -17,8 +17,12 @@ export const useTaskStore = create<TaskStore>((set) => ({
   tasks: [],
   streak: 0,
   loadTasks: async (date) => {
-    const data = await tasksQuery.getByDate(date);
-    set({ tasks: data });
+    try {
+      const data = await tasksQuery.getByDate(date);
+      set({ tasks: data });
+    } catch (e) {
+      console.warn('Failed to load tasks:', e);
+    }
   },
   addTask: async (title, date, priority = 'none') => {
     await tasksQuery.create(title, date, priority);
@@ -56,7 +60,11 @@ export const useTaskStore = create<TaskStore>((set) => ({
     });
   },
   loadStreak: async () => {
-    const streak = await tasksQuery.getStreak();
-    set({ streak });
+    try {
+      const streak = await tasksQuery.getStreak();
+      set({ streak });
+    } catch (e) {
+      console.warn('Failed to load streak:', e);
+    }
   },
 }));

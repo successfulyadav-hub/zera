@@ -1,6 +1,9 @@
 import { create } from 'zustand';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '@/lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
+
+const ONBOARDING_KEY = 'zera_onboarding_seen';
 
 interface AuthStore {
   session: Session | null;
@@ -22,10 +25,14 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   initialize: async () => {
     try {
-      const { data } = await supabase.auth.getSession();
+      const [{ data }, onboardingRaw] = await Promise.all([
+        supabase.auth.getSession(),
+        AsyncStorage.getItem(ONBOARDING_KEY),
+      ]);
       set({
         session: data.session,
         user: data.session?.user ?? null,
+        hasSeenOnboarding: onboardingRaw === 'true',
         loading: false,
       });
 
@@ -54,5 +61,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ session: null, user: null });
   },
 
-  markOnboardingSeen: () => set({ hasSeenOnboarding: true }),
+  markOnboardingSeen: () => {
+    set({ hasSeenOnboarding: true });
+    AsyncStorage.setItem(ONBOARDING_KEY, 'true');
+  },
 }));

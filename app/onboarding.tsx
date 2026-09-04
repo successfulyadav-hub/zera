@@ -6,8 +6,9 @@ import { useTheme } from '@/hooks/useTheme';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { spacing, layout } from '@/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { FadeInDown } from 'react-native-reanimated';
-import { Calendar, CheckSquare, FileText, Bell } from 'lucide-react-native';
+import Animated, { FadeInDown, FadeIn, useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import { Calendar, CheckSquare, FileText, Bell, Sparkles } from 'lucide-react-native';
+import { hapticLight } from '@/utils/haptics';
 
 const { width } = Dimensions.get('window');
 
@@ -15,28 +16,33 @@ interface OnboardingPage {
   icon: React.ComponentType<{ color: string; size: number }>;
   title: string;
   subtitle: string;
+  accent: string;
 }
 
 const PAGES: OnboardingPage[] = [
   {
     icon: Calendar,
     title: 'Your day, unified',
-    subtitle: 'Calendar, tasks, notes, and reminders in one calm space.',
+    subtitle: 'Calendar, tasks, notes, and reminders\nin one calm space.',
+    accent: '#7B8F7A',
   },
   {
     icon: CheckSquare,
     title: 'Tasks that flow',
-    subtitle: 'Prioritize, swipe to complete, and track your streak.',
+    subtitle: 'Prioritize, swipe to complete,\nand track your streak.',
+    accent: '#8FA37B',
   },
   {
     icon: FileText,
     title: 'Notes that stick',
-    subtitle: 'Quick capture with auto-save. Pin what matters most.',
+    subtitle: 'Quick capture with auto-save.\nPin what matters most.',
+    accent: '#7B8FA3',
   },
   {
     icon: Bell,
     title: 'Never miss a beat',
-    subtitle: 'Set reminders with smart notifications and recurrence.',
+    subtitle: 'Set reminders with smart\nnotifications and recurrence.',
+    accent: '#A37B8F',
   },
 ];
 
@@ -47,21 +53,28 @@ export default function OnboardingScreen() {
   const markOnboardingSeen = useAuthStore((s) => s.markOnboardingSeen);
   const [currentPage, setCurrentPage] = useState(0);
   const flatListRef = useRef<FlatList>(null);
+  const dotScale = useSharedValue(1);
 
   const handleGetStarted = () => {
+    hapticLight();
     markOnboardingSeen();
     router.replace('/(tabs)/today');
   };
 
   const handleSignIn = () => {
+    hapticLight();
     markOnboardingSeen();
     router.push('/auth/login');
   };
 
   const handleNext = () => {
+    hapticLight();
     if (currentPage < PAGES.length - 1) {
       flatListRef.current?.scrollToIndex({ index: currentPage + 1 });
       setCurrentPage(currentPage + 1);
+      dotScale.value = withSpring(1.3, { damping: 10 }, () => {
+        dotScale.value = withSpring(1);
+      });
     } else {
       handleGetStarted();
     }
@@ -71,10 +84,15 @@ export default function OnboardingScreen() {
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.bg, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-      <Animated.View entering={FadeInDown.delay(200).duration(600)} style={styles.logoContainer}>
+      <Animated.View entering={FadeInDown.delay(200).duration(800).springify()} style={styles.logoContainer}>
         <Text variant="cursiveLg" color={colors.sage} align="center">
           zera
         </Text>
+        <Animated.View entering={FadeIn.delay(600).duration(500)}>
+          <Text variant="caption" color={colors.stone} align="center" style={styles.tagline}>
+            beautifully minimal
+          </Text>
+        </Animated.View>
       </Animated.View>
 
       <FlatList
@@ -89,19 +107,26 @@ export default function OnboardingScreen() {
           setCurrentPage(page);
         }}
         keyExtractor={(_, i) => String(i)}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           const Icon = item.icon;
           return (
             <View style={[styles.page, { width }]}>
-              <View style={[styles.iconCircle, { backgroundColor: colors.sageSoft }]}>
+              <Animated.View
+                entering={FadeInDown.delay(300 + index * 100).duration(600)}
+                style={[styles.iconCircle, { backgroundColor: colors.sageSoft }]}
+              >
                 <Icon color={colors.sage} size={32} />
-              </View>
-              <Text variant="display" align="center" style={styles.pageTitle}>
-                {item.title}
-              </Text>
-              <Text variant="body" color={colors.stone} align="center" style={styles.pageSubtitle}>
-                {item.subtitle}
-              </Text>
+              </Animated.View>
+              <Animated.View entering={FadeInDown.delay(400 + index * 100).duration(600)}>
+                <Text variant="display" align="center" style={styles.pageTitle}>
+                  {item.title}
+                </Text>
+              </Animated.View>
+              <Animated.View entering={FadeInDown.delay(500 + index * 100).duration(600)}>
+                <Text variant="body" color={colors.stone} align="center" style={styles.pageSubtitle}>
+                  {item.subtitle}
+                </Text>
+              </Animated.View>
             </View>
           );
         }}
@@ -109,17 +134,20 @@ export default function OnboardingScreen() {
 
       <View style={styles.dots}>
         {PAGES.map((_, i) => (
-          <View
+          <Animated.View
             key={i}
             style={[
               styles.dot,
-              { backgroundColor: i === currentPage ? colors.sage : colors.divider },
+              {
+                backgroundColor: i === currentPage ? colors.sage : colors.divider,
+                width: i === currentPage ? 24 : 8,
+              },
             ]}
           />
         ))}
       </View>
 
-      <View style={styles.actions}>
+      <Animated.View entering={FadeInDown.delay(700).duration(500)} style={styles.actions}>
         <Button
           label={isLastPage ? 'Get Started' : 'Next'}
           onPress={handleNext}
@@ -140,7 +168,7 @@ export default function OnboardingScreen() {
             style={styles.signInBtn}
           />
         )}
-      </View>
+      </Animated.View>
     </View>
   );
 }
@@ -149,7 +177,13 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   logoContainer: {
     paddingTop: spacing.xxl,
-    paddingBottom: spacing.md,
+    paddingBottom: spacing.sm,
+  },
+  tagline: {
+    marginTop: spacing.xs,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    fontSize: 11,
   },
   page: {
     justifyContent: 'center',
@@ -157,9 +191,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.screenPaddingH * 2,
   },
   iconCircle: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: spacing.xl,
@@ -168,16 +202,16 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   pageSubtitle: {
-    lineHeight: 22,
+    lineHeight: 24,
   },
   dots: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     gap: spacing.sm,
     paddingVertical: spacing.lg,
   },
   dot: {
-    width: 8,
     height: 8,
     borderRadius: 4,
   },
