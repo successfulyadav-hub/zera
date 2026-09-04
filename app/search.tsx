@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { FlashList } from '@shopify/flash-list';
 import { Calendar, CheckSquare, FileText, Bell, X } from 'lucide-react-native';
@@ -24,6 +24,7 @@ export default function SearchScreen() {
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [searching, setSearching] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
@@ -34,11 +35,16 @@ export default function SearchScreen() {
     setQuery(text);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     if (text.trim().length >= 2) {
+      setSearching(true);
       debounceRef.current = setTimeout(() => {
-        searchQuery.search(text.trim()).then(setResults);
+        searchQuery.search(text.trim()).then((r) => {
+          setResults(r);
+          setSearching(false);
+        }).catch(() => setSearching(false));
       }, 200);
     } else {
       setResults([]);
+      setSearching(false);
     }
   }, []);
 
@@ -84,7 +90,9 @@ export default function SearchScreen() {
         keyExtractor={(item) => `${item.type}-${item.id}`}
         contentContainerStyle={styles.list}
         ListEmptyComponent={
-          query.length >= 2 ? (
+          searching ? (
+            <ActivityIndicator size="small" color={colors.sage} style={styles.empty} />
+          ) : query.length >= 2 ? (
             <Text variant="body" color={colors.stone} align="center" style={styles.empty}>
               No results found
             </Text>

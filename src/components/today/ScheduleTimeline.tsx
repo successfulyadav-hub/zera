@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 import { Text } from '@/components/ui';
 import { type Event } from '@/database/queries/events';
@@ -28,9 +28,9 @@ export function ScheduleTimeline({ events }: ScheduleTimelineProps) {
 
   if (events.length === 0) {
     return (
-      <View style={styles.emptyContainer}>
+      <Animated.View entering={FadeIn.duration(500)} style={styles.emptyContainer}>
         <Text variant="cursive" color={colors.stone}>nothing planned — enjoy the space.</Text>
-      </View>
+      </Animated.View>
     );
   }
 

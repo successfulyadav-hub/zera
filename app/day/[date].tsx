@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react-native';
@@ -13,6 +13,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { DayHeader } from '@/components/today/DayHeader';
+import { ListSkeleton } from '@/components/shared/Skeleton';
 import { ScheduleTimeline } from '@/components/today/ScheduleTimeline';
 import { TaskSection } from '@/components/today/TaskSection';
 import { NotePreview } from '@/components/today/NotePreview';
@@ -49,6 +50,8 @@ export default function DayScreen() {
     parseDate(dateParam || formatDateKey(new Date())),
   );
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [loading, setLoading] = useState(true);
+  const hasLoaded = useRef(false);
   const dateString = formatDateKey(currentDate);
 
   const { tasks, loadTasks, addTask, toggleComplete, deleteTask, updatePriority } =
@@ -57,9 +60,12 @@ export default function DayScreen() {
   const { notes, loadNotes } = useNoteStore();
 
   useEffect(() => {
-    loadTasks(dateString);
-    loadEvents(dateString);
-    loadNotes(dateString);
+    Promise.all([loadTasks(dateString), loadEvents(dateString), loadNotes(dateString)]).then(() => {
+      if (!hasLoaded.current) {
+        hasLoaded.current = true;
+        setLoading(false);
+      }
+    });
   }, [dateString]);
 
   const flipTo = (direction: 'next' | 'prev') => {
@@ -196,6 +202,14 @@ export default function DayScreen() {
             showsVerticalScrollIndicator={false}
           >
             <DayHeader date={currentDate} />
+            {loading ? (
+              <View style={{ paddingHorizontal: layout.screenPaddingH }}>
+                <ListSkeleton count={2} type="event" />
+                <View style={{ height: spacing.lg }} />
+                <ListSkeleton count={3} type="task" />
+              </View>
+            ) : (
+            <>
             <ScheduleTimeline events={events} />
             <TaskSection
               tasks={tasks}
@@ -218,6 +232,8 @@ export default function DayScreen() {
               swipeable
             />
             <NotePreview note={todaysNote} date={dateString} />
+            </>
+            )}
           </ScrollView>
         </Animated.View>
       </GestureDetector>

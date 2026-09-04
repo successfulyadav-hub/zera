@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { Text } from '@/components/ui';
 import { TaskItem } from '@/components/tasks/TaskItem';
 import { SwipeableTaskItem } from '@/components/tasks/SwipeableTaskItem';
@@ -53,6 +54,11 @@ export function TaskSection({ tasks, onToggleTask, onAddTask, onDeleteTask, onEd
       </View>
 
       <View style={styles.list}>
+        {tasks.length === 0 && (
+          <Animated.View entering={FadeIn.duration(400)} style={styles.emptyHint}>
+            <Text variant="cursive" color={colors.stone}>a clean slate — what will you tackle?</Text>
+          </Animated.View>
+        )}
         {tasks.map((task) =>
           swipeable && onDeleteTask ? (
             <SwipeableTaskItem
@@ -105,6 +111,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   list: { marginBottom: spacing.sm },
+  emptyHint: {
+    alignItems: 'center',
+    paddingVertical: spacing.lg,
+    paddingHorizontal: layout.screenPaddingH,
+  },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
