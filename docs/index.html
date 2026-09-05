@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zera — Plant what matters. Grow your days.</title>
+<meta name="description" content="A calm, beautiful planner that brings your tasks, events, notes, and reminders into one intentional space.">
+<meta name="theme-color" content="#7B8F7A">
+<meta property="og:title" content="Zera">
+<meta property="og:description" content="Your day, thoughtfully designed. A calm planner for tasks, events, notes, and reminders.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Caveat:wght@400;600&display=swap">
+
+<style>
+:root {
+  --ground: #F0EDE6;
+  --surface: #FAFAF7;
+  --ink: #2A2824;
+  --ink-muted: #6B6560;
+  --ink-faint: #9B958E;
+  --sage: #7B8F7A;
+  --sage-hover: #6A7E69;
+  --sage-soft: #E8EDE7;
+  --sage-glow: rgba(123,143,122,0.12);
+  --border: #E2DED6;
+  --soil: #D4C5AD;
+  --soil-deep: #C0B094;
+  --glass: rgba(240,237,230,0.90);
+  --sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --cursive: 'Caveat', cursive;
+}
+@media (prefers-color-scheme:dark) {
+  :root:not([data-theme="light"]) {
+    --ground:#1A1917;--surface:#242320;--ink:#E8E4DC;--ink-muted:#9B958E;
+    --ink-faint:#6B6560;--sage:#8FA28E;--sage-hover:#A0B39F;--sage-soft:#2A3129;
+    --sage-glow:rgba(143,162,142,0.08);--border:#36332C;
+    --soil:#3A3328;--soil-deep:#2D271F;--glass:rgba(26,25,23,0.90);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:#1A1917;--surface:#242320;--ink:#E8E4DC;--ink-muted:#9B958E;
+  --ink-faint:#6B6560;--sage:#8FA28E;--sage-hover:#A0B39F;--sage-soft:#2A3129;
+  --sage-glow:rgba(143,162,142,0.08);--border:#36332C;
+  --soil:#3A3328;--soil-deep:#2D271F;--glass:rgba(26,25,23,0.90);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--sage);color:#fff}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 clamp(24px,5vw,48px)}
+
+.site-header{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 0;transition:background .4s,box-shadow .4s,padding .4s}
+.site-header.scrolled{background:var(--ground);box-shadow:0 1px 0 var(--border);padding:14px 0}
+.header-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--cursive);font-size:28px;font-weight:600;color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 24px;border-radius:100px;border:none;cursor:pointer;transition:all .25s;text-decoration:none}
+.btn-primary{background:var(--sage);color:#fff}
+.btn-primary:hover{background:var(--sage-hover);transform:translateY(-1px);box-shadow:0 4px 16px var(--sage-glow)}
+.btn-lg{font-size:15px;padding:14px 32px}
+
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px}
+.hero-inner{max-width:720px}
+.hero-line1{font-weight:500;font-size:clamp(22px,4vw,42px);line-height:1.3;letter-spacing:-0.02em;margin-bottom:32px;opacity:0;animation:fadeUp 1.2s cubic-bezier(.16,1,.3,1) .3s forwards}
+.hero-line2{font-family:var(--cursive);font-size:clamp(20px,3.2vw,36px);color:var(--sage);opacity:0;animation:fadeUp 1.2s cubic-bezier(.16,1,.3,1) 1.6s forwards}
+.scroll-hint{margin-top:60px;opacity:0;animation:fadeUp 1s ease 2.8s forwards}
+.scroll-hint svg{width:24px;height:24px;stroke:var(--ink-faint);stroke-width:2;fill:none;animation:scrollBounce 2s ease-in-out 3.5s infinite}
+
+.scrolly{display:grid;grid-template-columns:1fr;min-height:200vh}
+.scrolly-visual,.scrolly-steps{grid-column:1;grid-row:1}
+.scrolly-visual{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;z-index:1}
+.growth-tree{width:min(320px,60vw);height:auto;max-height:85vh;display:block}
+.scrolly-steps{position:relative;z-index:2;pointer-events:none;padding:10vh 0 20vh}
+.step{min-height:70vh;display:flex;align-items:center;padding:20px clamp(16px,4vw,40px);pointer-events:auto}
+.step:first-child{min-height:50vh}
+.step:last-child{min-height:60vh}
+.step-card{max-width:380px;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;padding:clamp(20px,3vw,32px) clamp(18px,3vw,28px);border:1px solid var(--border);box-shadow:0 4px 24px rgba(0,0,0,.06)}
+
+.step-card .eyebrow{font-family:var(--cursive);font-size:18px;color:var(--sage);margin-bottom:6px}
+.step-card .heading{font-weight:600;font-size:clamp(18px,2.2vw,24px);letter-spacing:-0.01em;margin-bottom:12px;line-height:1.35}
+.step-card .body{font-weight:300;font-size:clamp(15px,1.2vw,17px);color:var(--ink-muted);line-height:1.85}
+.step-card .body strong{font-weight:600;color:var(--ink)}
+.step-card .body em{font-family:var(--cursive);font-size:1.15em;font-style:normal;color:var(--sage)}
+.step-card .poetic{font-weight:300;font-size:clamp(15px,1.2vw,17px);color:var(--ink-muted);line-height:2.2;margin-top:12px}
+.step-card .poetic span{display:block}
+.step-card .accent{font-family:var(--cursive);font-size:clamp(20px,2.2vw,26px);color:var(--sage);margin:16px 0}
+.step-card .features{list-style:none;padding:0;margin:12px 0}
+.step-card .features li{font-weight:400;font-size:clamp(15px,1.2vw,17px);padding:3px 0;color:var(--ink)}
+.step-card .features li::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--sage);margin-right:10px;vertical-align:middle}
+
+.soil-fill{fill:var(--soil)}.soil-deep-fill{fill:var(--soil-deep)}
+.tree-seed{fill:var(--sage);opacity:0}
+.tree-ground{stroke:var(--soil-deep);stroke-width:1.5;fill:none;opacity:0}
+.tree-root{stroke:var(--sage);stroke-width:1.5;fill:none;stroke-linecap:round;opacity:0}
+.tree-sprout-leaf{fill:var(--sage);opacity:0;transform-origin:center}
+.tree-stem{stroke:var(--sage);stroke-width:2.5;fill:none;stroke-linecap:round}
+.tree-branch{stroke:var(--sage);stroke-width:1.5;fill:none;stroke-linecap:round}
+.tree-leaf{fill:var(--sage-soft);stroke:var(--sage);stroke-width:0.8;opacity:0;transform-origin:center}
+.tree-icon{stroke:var(--sage);stroke-width:1.2;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.tree-label{font-family:var(--cursive);font-size:20px;fill:var(--sage);text-anchor:middle;opacity:0}
+
+.app-reveal{padding:clamp(60px,10vh,100px) 0;text-align:center}
+.app-reveal h2{font-weight:600;font-size:clamp(22px,3vw,32px);letter-spacing:-0.02em;margin-bottom:8px}
+.app-reveal .subtitle{font-family:var(--cursive);font-size:20px;color:var(--sage);margin-bottom:48px}
+.phone{width:260px;margin:0 auto;background:var(--surface);border-radius:36px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08),0 20px 60px rgba(0,0,0,.1),inset 0 0 0 1.5px var(--border)}
+.phone-screen{background:var(--ground);border-radius:26px;overflow:hidden;padding:16px 14px 12px}
+.phone-status{display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:var(--ink-muted);margin-bottom:12px;padding:0 4px}
+.phone-day-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:2px}
+.phone-day-title{font-family:var(--cursive);font-size:24px;font-weight:600;color:var(--ink)}
+.phone-greeting{font-family:var(--cursive);font-size:13px;color:var(--sage);margin-top:2px}
+.phone-section-label{font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);margin:10px 0 6px}
+.phone-event{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.phone-event-time{font-size:8px;color:var(--ink-faint);width:32px;font-variant-numeric:tabular-nums}
+.phone-event-bar{width:2.5px;height:24px;border-radius:2px;background:var(--sage)}
+.phone-event-title{font-size:10px;font-weight:500;color:var(--ink)}
+.phone-task{display:flex;align-items:center;gap:7px;margin-bottom:5px;font-size:10px;color:var(--ink)}
+.phone-cb{width:13px;height:13px;border-radius:3px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.phone-cb.done{background:var(--sage);border-color:var(--sage)}
+.phone-cb.done::after{content:'';width:5px;height:3px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translateY(-0.5px)}
+.phone-task.completed{color:var(--ink-faint);text-decoration:line-through}
+.phone-note{background:var(--sage-soft);border-radius:8px;padding:8px 10px;margin-top:10px}
+.phone-note-title{font-size:9px;font-weight:600;margin-bottom:2px}
+.phone-note-body{font-family:var(--cursive);font-size:11px;color:var(--ink-muted)}
+
+.cta-section{padding:clamp(60px,10vh,100px) 0;text-align:center}
+.cta-section h2{font-weight:600;font-size:clamp(26px,3.5vw,40px);letter-spacing:-0.02em;margin-bottom:12px}
+.cta-section .cta-sub{font-family:var(--cursive);font-size:20px;color:var(--sage);margin-bottom:32px}
+.cta-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.cta-note{font-size:13px;color:var(--ink-faint)}
+
+.site-footer{padding:40px 0;border-top:1px solid var(--border)}
+.footer-inner{display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:var(--cursive);font-size:20px;font-weight:600}
+.footer-text{font-size:13px;color:var(--ink-faint)}
+.footer-links a{font-size:13px;color:var(--ink-muted);transition:color .2s}
+.footer-links a:hover{color:var(--ink)}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.in-view{opacity:1;transform:translateY(0)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+@media(prefers-reduced-motion:reduce){
+  .reveal,.hero-line1,.hero-line2,.scroll-hint{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}
+  .tree-seed,.tree-ground,.tree-root,.tree-stem,.tree-branch,.tree-leaf,.tree-icon,.tree-label,.tree-sprout-leaf,.soil-fill,.soil-deep-fill{opacity:1!important;transform:none!important;stroke-dashoffset:0!important}
+}
+
+@media(max-width:640px){
+  .step-card{max-width:280px}
+  .growth-tree{width:min(220px,55vw)}
+  .footer-inner{flex-direction:column;gap:12px;text-align:center}
+  .phone{width:230px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="#" class="logo">Zera</a>
+    <a href="#download" class="btn btn-primary">Download</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-line1">Somewhere between then and now,<br>we made the day complicated.</p>
+    <p class="hero-line2">Zera is here to make it simple again.</p>
+    <div class="scroll-hint">
+      <svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+    </div>
+  </div>
+</section>
+
+<section class="scrolly" id="story">
+  <div class="scrolly-visual">
+    <svg class="growth-tree" viewBox="0 0 300 520" fill="none">
+      <rect class="soil-fill" x="0" y="312" width="300" height="208" rx="0"/>
+      <rect class="soil-deep-fill" x="0" y="400" width="300" height="120" rx="0"/>
+      <path class="tree-ground" d="M0,312 Q75,308 150,310 Q225,312 300,309" fill="none"/>
+      <ellipse class="tree-seed" cx="150" cy="20" rx="7" ry="10"/>
+      <path class="tree-root" d="M150,316 C138,355 108,380 78,415"/>
+      <path class="tree-root" d="M150,316 C162,355 192,380 222,415"/>
+      <path class="tree-root" d="M150,316 Q148,370 144,440"/>
+      <ellipse class="tree-sprout-leaf" cx="138" cy="278" rx="14" ry="7" transform="rotate(-35 138 278)"/>
+      <ellipse class="tree-sprout-leaf" cx="162" cy="278" rx="14" ry="7" transform="rotate(35 162 278)"/>
+      <path class="tree-stem" d="M150,310 C150,280 150,250 149,210 C148,170 149,130 150,75"/>
+      <path class="tree-branch" d="M149,250 Q115,238 68,244"/>
+      <path class="tree-branch" d="M149,215 Q185,203 238,198"/>
+      <path class="tree-branch" d="M148,175 Q112,160 52,155"/>
+      <path class="tree-branch" d="M149,140 Q185,126 242,118"/>
+      <path class="tree-branch" d="M150,105 Q112,88 56,78"/>
+      <path class="tree-branch" d="M150,85 Q188,68 240,58"/>
+      <circle class="tree-leaf" cx="66" cy="245" r="20"/>
+      <circle class="tree-leaf" cx="240" cy="197" r="20"/>
+      <circle class="tree-leaf" cx="50" cy="154" r="21"/>
+      <circle class="tree-leaf" cx="244" cy="117" r="20"/>
+      <circle class="tree-leaf" cx="54" cy="77" r="21"/>
+      <circle class="tree-leaf" cx="242" cy="57" r="20"/>
+      <g class="tree-icon" transform="translate(59,239)"><rect x="0" y="0" width="13" height="11" rx="1.5" fill="none"/><line x1="3" y1="-2" x2="3" y2="2"/><line x1="10" y1="-2" x2="10" y2="2"/><line x1="0" y1="4" x2="13" y2="4"/></g>
+      <g class="tree-icon" transform="translate(233,193)"><polyline points="0,4 5,9 13,0"/></g>
+      <g class="tree-icon" transform="translate(43,147)"><rect x="0" y="0" width="11" height="15" rx="1.5" fill="none"/><line x1="3" y1="4" x2="8" y2="4"/><line x1="3" y1="7" x2="8" y2="7"/><line x1="3" y1="10" x2="6" y2="10"/></g>
+      <g class="tree-icon" transform="translate(237,110)"><path d="M7,0 C3,0 0,3 0,7 L0,9 L14,9 L14,7 C14,3 11,0 7,0" fill="none"/><line x1="5" y1="11" x2="9" y2="11"/></g>
+      <g class="tree-icon" transform="translate(47,70)"><circle cx="7" cy="7" r="7" fill="none"/><line x1="7" y1="4" x2="7" y2="7"/><line x1="7" y1="7" x2="10" y2="9"/></g>
+      <g class="tree-icon" transform="translate(235,50)"><path d="M7,13 L7,7 C7,3 4,0 0,0 C4,1 6,3 6,7" fill="none"/><path d="M7,9 C7,5 10,2 14,2 C10,3 8,5 8,9" fill="none"/></g>
+      <text class="tree-label" x="150" y="48">Zera</text>
+    </svg>
+  </div>
+
+  <div class="scrolly-steps">
+    <div class="step"><div class="step-card"><div class="eyebrow">a note from a simpler time</div><p class="body">There was a time when a day was simply a day.</p><div class="poetic"><span>The sun came up.</span><span>The kettle whistled.</span><span>Someone wrote down what needed doing.</span><span>And, somehow, life carried on.</span></div></div></div>
+    <div class="step"><div class="step-card"><p class="body">There were no red badges demanding attention. No twelve calendars fighting for space. No endless lists reminding you of the lists you had forgotten.</p><p class="body" style="margin-top:12px">Just a piece of paper, a pen, and the quiet certainty of knowing what came next.</p></div></div>
+    <div class="step" style="justify-content:flex-end"><div class="step-card"><p class="heading"><strong>Then we got faster.</strong></p><p class="body">Our days filled with meetings, messages, reminders, emails, deadlines, tabs, notifications and little red numbers asking us to <em>look at me.</em></p></div></div>
+    <div class="step"><div class="step-card"><p class="body">We built tools to help us become more productive. And somehow, being productive became <strong>exhausting.</strong></p><p class="body" style="margin-top:12px">So we wondered &mdash;</p><p class="heading" style="margin-top:12px"><strong>What if it didn't have to be this way?</strong></p></div></div>
+    <div class="step" style="justify-content:flex-end"><div class="step-card"><p class="body">What if your calendar, your tasks, your reminders and the thoughts in your head could simply&hellip; live together?</p><p class="body" style="margin-top:12px">Without the clutter. Without the noise. Without making you learn a system before you could use it.</p></div></div>
+    <div class="step"><div class="step-card"><p class="body">That is where <em>Zera</em> began.</p><p class="body" style="margin-top:12px">The name comes from the ancient Hebrew word <em>zeraʿ</em> &mdash; <strong>seed.</strong></p><p class="body" style="margin-top:12px">A seed is small. Almost insignificant at first. But give it a little time. A little care. A little consistency. And it grows.</p></div></div>
+    <div class="step" style="justify-content:flex-end"><div class="step-card"><p class="body">We think our days work the same way.</p><div class="poetic"><span>A small task becomes a finished project.</span><span>A small habit becomes a new way of living.</span><span>A thought becomes an idea.</span><span>One good day becomes another.</span></div></div></div>
+    <div class="step"><div class="step-card"><p class="accent">Zera is a beautifully simple place for all of it.</p><ul class="features"><li>Your calendar</li><li>Your reminders</li><li>Your tasks</li><li>Your notes</li><li>Your day</li></ul><p class="body" style="margin-top:12px">All in one quiet space, built around the one thing we actually live &mdash; <strong>today.</strong></p></div></div>
+    <div class="step" style="justify-content:flex-end"><div class="step-card"><p class="heading"><strong>So, plant something today.</strong></p><div class="poetic"><span>A task.</span><span>An idea.</span><span>A promise to yourself.</span><span>A small beginning.</span></div><p class="body" style="margin-top:16px">We'll take care of the rest.</p><p class="accent" style="margin-top:16px">Plant what matters. Grow your days.</p></div></div>
+  </div>
+</section>
+
+<section class="app-reveal reveal" id="app">
+  <div class="wrap">
+    <h2>Your day, in one place</h2>
+    <p class="subtitle">this is Zera</p>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="phone-status"><span>9:41</span><span>100%</span></div>
+        <div><div class="phone-day-label">Friday</div><div class="phone-day-title">September 5</div><div class="phone-greeting">make today count</div></div>
+        <div class="phone-section-label">Schedule</div>
+        <div class="phone-event"><span class="phone-event-time">9:00</span><div class="phone-event-bar"></div><span class="phone-event-title">Team standup</span></div>
+        <div class="phone-event"><span class="phone-event-time">2:00</span><div class="phone-event-bar" style="background:#B8926A"></div><span class="phone-event-title">Design review</span></div>
+        <div class="phone-section-label">Tasks</div>
+        <div class="phone-task completed"><div class="phone-cb done"></div><span>Review pull request</span></div>
+        <div class="phone-task"><div class="phone-cb"></div><span>Update documentation</span></div>
+        <div class="phone-task"><div class="phone-cb"></div><span>Send weekly report</span></div>
+        <div class="phone-note"><div class="phone-note-title">Project ideas</div><div class="phone-note-body">Explore the new API for...</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="download">
+  <div class="wrap reveal">
+    <h2>Plant something today</h2>
+    <p class="cta-sub">Free. Private. No account required.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn btn-primary btn-lg" id="download-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download for Android
+      </a>
+    </div>
+    <p class="cta-note">APK &middot; 112 MB &middot; Works offline</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div><span class="footer-logo">Zera</span><span class="footer-text" style="margin-left:16px">Plant what matters. Grow your days.</span></div>
+    <div class="footer-links"><a href="https://github.com/successfulyadav-hub/zera" target="_blank" rel="noopener">GitHub</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var revealObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in-view');revealObs.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){revealObs.observe(el)});
+
+  var header=document.querySelector('.site-header'),hTick=false;
+  window.addEventListener('scroll',function(){if(!hTick){requestAnimationFrame(function(){header.classList.toggle('scrolled',scrollY>40);hTick=false});hTick=true}});
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}})});
+
+  var stepObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}else{e.target.style.opacity='0';e.target.style.transform='translateY(20px)'}})},{threshold:.3});
+  document.querySelectorAll('.step-card').forEach(function(el){el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)';stepObs.observe(el)});
+
+  var svg=document.querySelector('.growth-tree');
+  if(!svg)return;
+  var seed=svg.querySelector('.tree-seed'),groundLine=svg.querySelector('.tree-ground'),soilFill=svg.querySelector('.soil-fill'),soilDeep=svg.querySelector('.soil-deep-fill'),roots=svg.querySelectorAll('.tree-root'),sproutLeaves=svg.querySelectorAll('.tree-sprout-leaf'),stem=svg.querySelector('.tree-stem'),branches=svg.querySelectorAll('.tree-branch'),leaves=svg.querySelectorAll('.tree-leaf'),icons=svg.querySelectorAll('.tree-icon'),label=svg.querySelector('.tree-label');
+  var allPaths=[groundLine].concat(Array.from(roots),[stem],Array.from(branches)),pathLengths=new Map();
+  allPaths.forEach(function(p){if(!p)return;var len=p.getTotalLength();pathLengths.set(p,len);p.style.strokeDasharray=len;p.style.strokeDashoffset=len});
+  function drawPath(path,progress){if(!path)return;var len=pathLengths.get(path)||0;path.style.strokeDashoffset=len*(1-Math.max(0,Math.min(1,progress)))}
+  function lerp(val,inMin,inMax,outMin,outMax){if(val<=inMin)return outMin;if(val>=inMax)return outMax;return outMin+(val-inMin)*(outMax-outMin)/(inMax-inMin)}
+  function easeOut(t){return 1-Math.pow(1-t,3)}
+  var scrolly=document.querySelector('.scrolly'),prefersReduced=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  soilFill.style.opacity='0';soilDeep.style.opacity='0';
+  function updateTree(){
+    if(prefersReduced)return;
+    var rect=scrolly.getBoundingClientRect(),vh=window.innerHeight,top=-rect.top,total=rect.height-vh;
+    if(total<=0)return;
+    var p=Math.max(0,Math.min(1,top/total));
+    var seedFall=easeOut(lerp(p,0,.12,0,1)),seedY=20+seedFall*290;
+    seed.setAttribute('cy',seedY);
+    seed.style.opacity=p<.005?lerp(p,0,.005,0,1):1;
+    var plantProgress=lerp(p,.12,.18,0,1);
+    if(plantProgress>0){seed.setAttribute('cy',310+plantProgress*40);soilFill.style.opacity=lerp(p,.11,.14,0,1);soilDeep.style.opacity=lerp(p,.11,.14,0,1);groundLine.style.opacity=lerp(p,.11,.13,0,1);drawPath(groundLine,lerp(p,.11,.18,0,1))}else{soilFill.style.opacity='0';soilDeep.style.opacity='0';groundLine.style.opacity='0'}
+    if(p>.18)seed.style.opacity=lerp(p,.18,.24,1,0);
+    roots.forEach(function(r,i){var rp=lerp(p,.18+i*.03,.32+i*.03,0,1);r.style.opacity=rp>0?1:0;drawPath(r,easeOut(rp))});
+    drawPath(stem,easeOut(lerp(p,.22,.65,0,1)));
+    sproutLeaves.forEach(function(sl,i){var appear=lerp(p,.28+i*.02,.34+i*.02,0,1),fade=lerp(p,.50,.58,1,0);sl.style.opacity=Math.min(appear,fade);var s=Math.min(appear,1);sl.setAttribute('rx',14*s);sl.setAttribute('ry',7*s)});
+    branches.forEach(function(b,i){drawPath(b,easeOut(lerp(p,.45+i*.035,.58+i*.035,0,1)))});
+    leaves.forEach(function(l,i){var lp=easeOut(lerp(p,.55+i*.03,.68+i*.03,0,1));l.style.opacity=lp;l.style.transformOrigin='center';l.style.transform='scale('+lp+')'});
+    icons.forEach(function(ic,i){ic.style.opacity=lerp(p,.72+i*.02,.80+i*.02,0,1)});
+    label.style.opacity=lerp(p,.88,.96,0,1);
+  }
+  var treeRAF;
+  window.addEventListener('scroll',function(){if(treeRAF)return;treeRAF=requestAnimationFrame(function(){updateTree();treeRAF=null})});
+  updateTree();
+})();
+</script>
+</body>
+</html>
