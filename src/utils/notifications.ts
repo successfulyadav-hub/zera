@@ -17,14 +17,32 @@ if (!isUnsupported) {
   });
 }
 
+async function ensureAndroidChannel() {
+  if (Platform.OS !== 'android') return;
+  await Notifications.setNotificationChannelAsync('reminders', {
+    name: 'Reminders',
+    importance: Notifications.AndroidImportance.HIGH,
+    sound: 'default',
+    vibrationPattern: [0, 250, 250, 250],
+    lightColor: '#7B8F7A',
+  });
+  await Notifications.setNotificationChannelAsync('tasks', {
+    name: 'Tasks',
+    importance: Notifications.AndroidImportance.DEFAULT,
+    sound: 'default',
+  });
+}
+
 export async function requestNotificationPermissions(): Promise<boolean> {
   if (isUnsupported) return false;
   try {
+    await ensureAndroidChannel();
     const { status: existing } = await Notifications.getPermissionsAsync();
     if (existing === 'granted') return true;
     const { status } = await Notifications.requestPermissionsAsync();
     return status === 'granted';
-  } catch {
+  } catch (e) {
+    console.warn('Notification permission error:', e);
     return false;
   }
 }
@@ -39,7 +57,10 @@ export async function scheduleReminderNotification(
   if (isUnsupported) return null;
   try {
     const hasPermission = await requestNotificationPermissions();
-    if (!hasPermission) return null;
+    if (!hasPermission) {
+      console.warn('Notification permission not granted');
+      return null;
+    }
 
     const [year, month, day] = date.split('-').map(Number);
     const [hour, minute] = time.split(':').map(Number);
@@ -53,15 +74,18 @@ export async function scheduleReminderNotification(
         body: body || undefined,
         data: { reminderId, type: 'reminder' },
         sound: true,
+        ...(Platform.OS === 'android' && { channelId: 'reminders' }),
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: triggerDate,
+        ...(Platform.OS === 'android' && { channelId: 'reminders' }),
       },
     });
 
     return id;
-  } catch {
+  } catch (e) {
+    console.warn('Failed to schedule reminder notification:', e);
     return null;
   }
 }
@@ -89,15 +113,18 @@ export async function scheduleTaskNotification(
         body: title,
         data: { taskId, type: 'task', date },
         sound: true,
+        ...(Platform.OS === 'android' && { channelId: 'tasks' }),
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: triggerDate,
+        ...(Platform.OS === 'android' && { channelId: 'tasks' }),
       },
     });
 
     return id;
-  } catch {
+  } catch (e) {
+    console.warn('Failed to schedule task notification:', e);
     return null;
   }
 }
