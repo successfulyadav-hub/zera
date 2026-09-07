@@ -18,6 +18,7 @@ import { UndoToast } from '@/components/ui/UndoToast';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { NetworkStatus } from '@/components/shared/NetworkStatus';
 import { requestNotificationPermissions, useNotificationResponse } from '@/utils/notifications';
+import { registerPushToken } from '@/utils/pushNotifications';
 
 if (Platform.OS === 'web') {
   LogBox.ignoreAllLogs(true);
@@ -32,6 +33,7 @@ export default function RootLayout() {
   const { colors, isDark } = useTheme();
   const loadSettings = useSettingsStore((s) => s.load);
   const initAuth = useAuthStore((s) => s.initialize);
+  const user = useAuthStore((s) => s.user);
   const toast = useToast();
   const undoToast = useUndoToast();
   const router = useRouter();
@@ -48,6 +50,12 @@ export default function RootLayout() {
     initAuth();
     requestNotificationPermissions();
   }, []);
+
+  useEffect(() => {
+    if (user?.id) {
+      registerPushToken(user.id);
+    }
+  }, [user?.id]);
 
   useEffect(() => {
     if (!notificationResponse || !dbReady) return;

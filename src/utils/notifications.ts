@@ -79,7 +79,6 @@ export async function scheduleReminderNotification(
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: triggerDate,
-        ...(Platform.OS === 'android' && { channelId: 'reminders' }),
       },
     });
 
@@ -118,7 +117,6 @@ export async function scheduleTaskNotification(
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: triggerDate,
-        ...(Platform.OS === 'android' && { channelId: 'tasks' }),
       },
     });
 

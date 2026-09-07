@@ -6,7 +6,7 @@ interface ReminderStore {
   upcoming: Reminder[];
   loadReminders: (date: string) => Promise<void>;
   loadUpcoming: (fromDate: string) => Promise<void>;
-  addReminder: (reminder: Omit<Reminder, 'id'>) => Promise<void>;
+  addReminder: (reminder: Omit<Reminder, 'id'>) => Promise<string>;
   updateReminder: (id: string, data: Partial<Omit<Reminder, 'id'>>, date: string) => Promise<void>;
   deleteReminder: (id: string, date: string) => Promise<void>;
   toggleActive: (id: string, isActive: boolean, date: string) => Promise<void>;
@@ -24,9 +24,10 @@ export const useReminderStore = create<ReminderStore>((set) => ({
     set({ upcoming: data });
   },
   addReminder: async (reminder) => {
-    await remindersQuery.create(reminder);
+    const id = await remindersQuery.create(reminder);
     const data = await remindersQuery.getByDate(reminder.date);
     set({ reminders: data });
+    return id;
   },
   updateReminder: async (id, data, date) => {
     await remindersQuery.update(id, data);

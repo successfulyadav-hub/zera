@@ -7,15 +7,10 @@
     "icon": "./assets/icon.png",
     "scheme": "zera",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F8F6F1"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.zera.app",
+      "newArchEnabled": true,
       "infoPlist": {
         "NSCalendarsUsageDescription": "Zera needs calendar access to sync your events.",
         "NSRemindersUsageDescription": "Zera uses reminders to keep you on track."
@@ -29,6 +24,7 @@
         "backgroundColor": "#F8F6F1"
       },
       "package": "com.zera.app",
+      "newArchEnabled": true,
       "permissions": [
         "NOTIFICATIONS",
         "RECEIVE_BOOT_COMPLETED",

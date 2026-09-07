@@ -27,7 +27,7 @@ export default function NewReminderScreen() {
 
   const handleSave = async () => {
     if (!title.trim()) return;
-    await addReminder({
+    const reminderId = await addReminder({
       title: title.trim(),
       description: description.trim() || null,
       date,
@@ -40,7 +40,7 @@ export default function NewReminderScreen() {
     });
 
     await scheduleReminderNotification(
-      'new',
+      reminderId,
       title.trim(),
       description.trim() || null,
       date,

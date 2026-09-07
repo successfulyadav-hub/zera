@@ -42,14 +42,18 @@ export const remindersQuery = {
     return await db.getFirstAsync<Reminder>('SELECT * FROM reminders WHERE id = ?', [id]);
   },
 
-  async create(reminder: Omit<Reminder, 'id'>): Promise<void> {
+  async create(reminder: Omit<Reminder, 'id'>): Promise<string> {
     const db = await getDB();
+    const id = Array.from(crypto.getRandomValues(new Uint8Array(16)))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
     await db.runAsync(
-      `INSERT INTO reminders (title, description, date, time, notify_before, is_recurring, recurrence_type, recurrence_end_date, is_active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [reminder.title, reminder.description, reminder.date, reminder.time, reminder.notify_before,
+      `INSERT INTO reminders (id, title, description, date, time, notify_before, is_recurring, recurrence_type, recurrence_end_date, is_active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id, reminder.title, reminder.description, reminder.date, reminder.time, reminder.notify_before,
        reminder.is_recurring, reminder.recurrence_type, reminder.recurrence_end_date, reminder.is_active]
     );
+    return id;
   },
 
   async update(id: string, data: Partial<Omit<Reminder, 'id'>>): Promise<void> {
