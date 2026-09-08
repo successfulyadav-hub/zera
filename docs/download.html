@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Zera — Your calm planner for Android</title>
+<meta name="description" content="Download Zera for Android. Free, private, works offline. Your day, thoughtfully designed.">
+<meta name="theme-color" content="#7B8F7A">
+<meta property="og:title" content="Download Zera">
+<meta property="og:description" content="Free, private, works offline. Download Zera for Android.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Caveat:wght@400;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.dl-hero{padding:clamp(140px,20vh,200px) 0 clamp(40px,6vh,60px);text-align:center;position:relative;overflow:hidden}
+.dl-hero::before{content:'';position:absolute;top:50%;left:50%;width:600px;height:600px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--sage-glow) 0%,transparent 70%);pointer-events:none;animation:pulse 4s ease-in-out infinite}
+.dl-hero .hero-eyebrow{font-family:var(--cursive);font-size:clamp(18px,2.5vw,22px);color:var(--sage);margin-bottom:12px;opacity:0;animation:fadeUp .8s var(--ease-out) .2s forwards}
+.dl-hero h1{font-weight:600;font-size:clamp(36px,6vw,64px);letter-spacing:-0.03em;line-height:1.1;margin-bottom:20px;opacity:0;animation:fadeUp .8s var(--ease-out) .4s forwards}
+.dl-hero .hero-sub{font-size:clamp(16px,1.8vw,19px);color:var(--ink-muted);max-width:480px;margin:0 auto 40px;line-height:1.7;opacity:0;animation:fadeUp .8s var(--ease-out) .6s forwards}
+
+.dl-actions{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s var(--ease-out) .8s forwards}
+.dl-btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--sans);font-size:17px;font-weight:600;padding:18px 36px;border-radius:16px;border:none;cursor:pointer;transition:all .3s var(--ease-out);text-decoration:none}
+.dl-btn-primary{background:var(--sage);color:#fff;box-shadow:0 4px 20px var(--sage-glow)}
+.dl-btn-primary:hover{background:var(--sage-hover);transform:translateY(-3px);box-shadow:0 8px 32px rgba(123,143,122,.25)}
+.dl-btn-primary:active{transform:translateY(-1px)}
+.dl-btn svg{width:22px;height:22px;flex-shrink:0}
+
+.dl-meta{display:flex;justify-content:center;gap:32px;margin-top:24px;opacity:0;animation:fadeUp .8s var(--ease-out) 1s forwards}
+.dl-meta-item{text-align:center}
+.dl-meta-item .value{font-weight:600;font-size:20px;color:var(--ink);display:block}
+.dl-meta-item .label{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em}
+
+/* Steps */
+.install-steps{padding:clamp(60px,10vh,100px) 0}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px}
+.step-card{position:relative;padding:32px 28px;background:var(--surface);border:1px solid var(--border);border-radius:20px;transition:transform .3s var(--ease-out),box-shadow .3s}
+.step-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.step-num{font-family:var(--cursive);font-size:48px;font-weight:600;color:var(--sage-soft);line-height:1;margin-bottom:8px;transition:color .3s}
+.step-card:hover .step-num{color:var(--sage)}
+.step-card h3{font-weight:600;font-size:17px;margin-bottom:8px}
+.step-card p{font-size:14px;color:var(--ink-muted);line-height:1.7}
+@media(max-width:720px){.steps-grid{grid-template-columns:1fr;max-width:400px;margin:48px auto 0}}
+
+/* Requirements */
+.requirements{padding:clamp(40px,8vh,80px) 0}
+.req-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:700px;margin:40px auto 0}
+.req-item{display:flex;align-items:flex-start;gap:14px;padding:20px;border-radius:12px;background:var(--surface);border:1px solid var(--border)}
+.req-icon{width:36px;height:36px;border-radius:10px;background:var(--sage-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.req-icon svg{width:18px;height:18px;stroke:var(--sage);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.req-item h4{font-weight:600;font-size:14px;margin-bottom:2px}
+.req-item p{font-size:13px;color:var(--ink-muted)}
+@media(max-width:640px){.req-grid{grid-template-columns:1fr}}
+
+/* Coming soon */
+.coming-soon{padding:clamp(60px,10vh,100px) 0;text-align:center}
+.coming-badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--sage);background:var(--sage-soft);padding:8px 20px;border-radius:100px;margin-bottom:24px}
+.coming-badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--sage);animation:pulse 2s ease-in-out infinite}
+.platform-cards{display:flex;justify-content:center;gap:24px;margin-top:32px;flex-wrap:wrap}
+.platform-card{width:200px;padding:28px 24px;background:var(--surface);border:1px solid var(--border);border-radius:16px;text-align:center;opacity:.6;transition:all .3s}
+.platform-card:hover{opacity:.8;transform:translateY(-2px)}
+.platform-card svg{width:36px;height:36px;margin:0 auto 12px;stroke:var(--ink-faint);stroke-width:1.5;fill:none}
+.platform-card h4{font-size:15px;margin-bottom:4px}
+.platform-card p{font-size:13px;color:var(--ink-faint)}
+
+/* FAQ */
+.faq{padding:clamp(60px,10vh,100px) 0}
+.faq-list{max-width:680px;margin:40px auto 0}
+.faq-item{border-bottom:1px solid var(--border);overflow:hidden}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:20px 0;cursor:pointer;font-weight:500;font-size:16px;transition:color .2s;background:none;border:none;width:100%;text-align:left;font-family:var(--sans);color:var(--ink)}
+.faq-q:hover{color:var(--sage)}
+.faq-q svg{width:20px;height:20px;stroke:var(--ink-faint);stroke-width:2;fill:none;flex-shrink:0;transition:transform .3s var(--ease-out)}
+.faq-item.open .faq-q svg{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease-out),padding .4s}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:20px}
+.faq-a p{font-size:15px;color:var(--ink-muted);line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="nav-overlay"></div>
+<nav class="site-nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-logo">Zera</a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="download.html" class="nav-link active">Download</a>
+      <a href="updates.html" class="nav-link">Updates</a>
+      <a href="https://github.com/successfulyadav-hub/zera" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<section class="dl-hero">
+  <div class="wrap">
+    <p class="hero-eyebrow">ready when you are</p>
+    <h1>Get Zera</h1>
+    <p class="hero-sub">Free. Private. No account required. Your calm planner, right in your pocket.</p>
+    <div class="dl-actions">
+      <a href="https://expo.dev/accounts/successfulyadav/projects/zera/builds/9fb14a62-937b-46ac-b41f-a13eb1cac0e7" class="dl-btn dl-btn-primary" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download for Android
+      </a>
+    </div>
+    <div class="dl-meta">
+      <div class="dl-meta-item"><span class="value">v1.0.0</span><span class="label">Version</span></div>
+      <div class="dl-meta-item"><span class="value">Android 8+</span><span class="label">Requires</span></div>
+      <div class="dl-meta-item"><span class="value">Free</span><span class="label">Forever</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="install-steps">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2>Three taps to calm</h2>
+      <p>simple as planting a seed</p>
+    </div>
+    <div class="steps-grid stagger">
+      <div class="step-card reveal">
+        <div class="step-num">1</div>
+        <h3>Download the APK</h3>
+        <p>Tap the download button above. The file will save to your device automatically.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">2</div>
+        <h3>Allow installation</h3>
+        <p>Android may ask to allow installs from this source. Tap "Allow" — it's safe, we promise.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">3</div>
+        <h3>Open and grow</h3>
+        <p>Launch Zera. No signup needed. Start planting your first task, event, or thought.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="requirements">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2>What you need</h2>
+      <p>not much, honestly</p>
+    </div>
+    <div class="req-grid stagger">
+      <div class="req-item reveal">
+        <div class="req-icon">
+          <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+        </div>
+        <div><h4>Android 8.0+</h4><p>Works on most phones from 2017 onwards</p></div>
+      </div>
+      <div class="req-item reveal">
+        <div class="req-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div><h4>Works offline</h4><p>No internet required. Sync is optional.</p></div>
+      </div>
+      <div class="req-item reveal">
+        <div class="req-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div><h4>Privacy first</h4><p>Data stays on your device. No tracking.</p></div>
+      </div>
+      <div class="req-item reveal">
+        <div class="req-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div><h4>Quick setup</h4><p>Ready in under 30 seconds. No account needed.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="coming-soon">
+  <div class="wrap reveal">
+    <div class="coming-badge">Coming soon</div>
+    <h2>Growing to new platforms</h2>
+    <p class="hero-sub" style="opacity:1;animation:none;margin-top:12px">We're planting seeds on other platforms too.</p>
+    <div class="platform-cards">
+      <div class="platform-card">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/><path d="M16.5 14.5c-.8.4-1.5.8-2.3.3-.8-.5-1.5-1.2-2-2-.5-.8-.3-1.5.3-2.3"/></svg>
+        <h4>iOS</h4>
+        <p>In development</p>
+      </div>
+      <div class="platform-card">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <h4>Desktop</h4>
+        <p>Exploring</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2>Questions</h2>
+      <p>we've got answers</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q">Is Zera really free?<svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><p>Yes. Completely free, no ads, no premium tier. We built Zera because we wanted it to exist, not to make money from it.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Is my data safe?<svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><p>Your data lives on your device. Cloud sync is entirely optional — if you enable it, your data is encrypted and stored securely on Supabase servers.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Do I need an account?<svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><p>No. Zera works fully offline without any account. You only need an account if you want cloud sync across devices.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Can I import from other apps?<svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><p>Not yet, but it's on our roadmap. We're considering imports from Google Calendar, Todoist, and Apple Reminders.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q">Why an APK and not the Play Store?<svg viewBox="0 0 24 24" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a"><p>We're working on a Play Store listing. In the meantime, the APK is the quickest way to get Zera into your hands. It's the exact same app.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand"><span class="footer-logo">Zera</span><p class="footer-tagline">Plant what matters. Grow your days.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="download.html">Download</a><a href="updates.html">Updates</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="https://github.com/successfulyadav-hub/zera" target="_blank" rel="noopener">GitHub</a></div>
+      <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+    <div class="footer-bottom"><span>2026 Zera</span><span>Made with intention</span></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+(function(){
+  document.querySelectorAll('.faq-item').forEach(function(item){
+    item.querySelector('.faq-q').addEventListener('click',function(){
+      var wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function(i){i.classList.remove('open')});
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>

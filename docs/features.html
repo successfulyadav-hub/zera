@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Features — Zera</title>
+<meta name="description" content="Discover how Zera brings your calendar, tasks, notes, and reminders into one calm, intentional space.">
+<meta name="theme-color" content="#7B8F7A">
+<meta property="og:title" content="Zera Features — One app. Your whole day.">
+<meta property="og:description" content="Calendar, tasks, notes, reminders, and cloud sync — all in one beautiful planner designed with intention.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Caveat:wght@400;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+/* ===== FEATURE ROWS ===== */
+.feature-row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,80px);align-items:center;padding:clamp(48px,8vh,80px) 0}
+.feature-row:nth-child(even) .feature-visual{order:-1}
+.feature-text .feature-eyebrow{font-family:var(--cursive);font-size:clamp(18px,2.2vw,22px);color:var(--sage);margin-bottom:8px}
+.feature-text h2{font-weight:600;font-size:clamp(24px,3vw,36px);letter-spacing:-0.02em;line-height:1.2;margin-bottom:16px}
+.feature-text p{font-size:clamp(15px,1.4vw,17px);color:var(--ink-muted);line-height:1.8;margin-bottom:12px}
+.feature-text .feature-list{list-style:none;padding:0;margin:16px 0 0}
+.feature-text .feature-list li{font-size:15px;color:var(--ink-muted);padding:6px 0;display:flex;align-items:center;gap:10px}
+.feature-text .feature-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--sage);flex-shrink:0}
+@media(max-width:800px){
+  .feature-row{grid-template-columns:1fr;gap:32px;text-align:center}
+  .feature-row:nth-child(even) .feature-visual{order:0}
+  .feature-text .feature-list{display:inline-block;text-align:left}
+}
+
+/* ===== MOCK-UP PHONE ===== */
+.mock-phone{width:220px;margin:0 auto;background:var(--surface);border-radius:32px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.06),0 16px 48px rgba(0,0,0,.1),inset 0 0 0 1.5px var(--border);transition:transform .4s var(--ease-out),box-shadow .4s}
+.mock-phone:hover{transform:translateY(-4px);box-shadow:0 4px 12px rgba(0,0,0,.08),0 24px 64px rgba(0,0,0,.14),inset 0 0 0 1.5px var(--border)}
+.mock-screen{background:var(--ground);border-radius:24px;overflow:hidden;padding:14px 12px 12px;min-height:280px}
+.mock-status{display:flex;justify-content:space-between;font-size:9px;font-weight:600;color:var(--ink-faint);margin-bottom:10px;padding:0 4px}
+
+/* ===== TODAY VIEW MOCK ===== */
+.mock-today .mock-day-label{font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:2px}
+.mock-today .mock-day-title{font-family:var(--cursive);font-size:22px;font-weight:600;color:var(--ink)}
+.mock-today .mock-greeting{font-family:var(--cursive);font-size:12px;color:var(--sage);margin-top:2px;margin-bottom:10px}
+.mock-section-label{font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-faint);margin:8px 0 5px}
+.mock-event{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.mock-event-time{font-size:8px;color:var(--ink-faint);width:28px;font-variant-numeric:tabular-nums}
+.mock-event-bar{width:2.5px;height:22px;border-radius:2px;background:var(--sage)}
+.mock-event-title{font-size:9px;font-weight:500;color:var(--ink)}
+.mock-task{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:9px;color:var(--ink)}
+.mock-cb{width:12px;height:12px;border-radius:3px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.mock-cb.done{background:var(--sage);border-color:var(--sage)}
+.mock-cb.done::after{content:'';width:4px;height:3px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translateY(-0.5px)}
+.mock-task.completed{color:var(--ink-faint);text-decoration:line-through}
+.mock-note-card{background:var(--sage-soft);border-radius:7px;padding:7px 9px;margin-top:8px}
+.mock-note-card .note-title{font-size:8px;font-weight:600;margin-bottom:2px}
+.mock-note-card .note-body{font-family:var(--cursive);font-size:10px;color:var(--ink-muted)}
+
+/* ===== CALENDAR MOCK ===== */
+.mock-calendar .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.mock-calendar .cal-month{font-weight:600;font-size:13px}
+.mock-calendar .cal-arrows{display:flex;gap:8px;color:var(--ink-faint);font-size:10px}
+.mock-calendar .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:8px;font-variant-numeric:tabular-nums}
+.mock-calendar .cal-day-name{color:var(--ink-faint);font-weight:600;font-size:7px;text-transform:uppercase;padding:2px 0}
+.mock-calendar .cal-day{padding:4px 0;border-radius:6px;color:var(--ink-muted);position:relative}
+.mock-calendar .cal-day.today{background:var(--sage);color:#fff;font-weight:600}
+.mock-calendar .cal-day.has-event::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--sage)}
+.mock-calendar .cal-day.today.has-event::after{background:#fff}
+.mock-calendar .cal-day.other-month{color:var(--ink-faint);opacity:.4}
+.cal-summary{margin-top:10px;border-top:1px solid var(--border);padding-top:8px}
+.cal-summary-item{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--ink-muted);padding:3px 0}
+.cal-summary-dot{width:5px;height:5px;border-radius:50%;background:var(--sage);flex-shrink:0}
+
+/* ===== TASKS MOCK ===== */
+.mock-tasks .tasks-header{font-weight:600;font-size:13px;margin-bottom:10px}
+.mock-tasks .task-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:10px}
+.mock-tasks .task-item:last-child{border-bottom:none}
+.mock-tasks .task-priority{width:4px;height:18px;border-radius:2px;flex-shrink:0}
+.mock-tasks .task-priority.high{background:#D97B6B}
+.mock-tasks .task-priority.medium{background:var(--warm)}
+.mock-tasks .task-priority.low{background:var(--sage)}
+.mock-tasks .task-content{flex:1}
+.mock-tasks .task-name{font-weight:500;color:var(--ink)}
+.mock-tasks .task-due{font-size:8px;color:var(--ink-faint);margin-top:1px}
+
+/* ===== NOTES MOCK ===== */
+.mock-notes .notes-header{font-weight:600;font-size:13px;margin-bottom:10px}
+.mock-notes .note-entry{background:var(--sage-soft);border-radius:8px;padding:10px;margin-bottom:6px}
+.mock-notes .note-entry-title{font-size:10px;font-weight:600;margin-bottom:3px}
+.mock-notes .note-entry-body{font-family:var(--cursive);font-size:11px;color:var(--ink-muted);line-height:1.5}
+.mock-notes .note-entry-meta{font-size:7px;color:var(--ink-faint);margin-top:4px}
+.mock-notes .cursor-blink{display:inline-block;width:1px;height:11px;background:var(--sage);margin-left:2px;animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ===== REMINDERS MOCK ===== */
+.mock-reminders .reminders-header{font-weight:600;font-size:13px;margin-bottom:10px}
+.mock-reminder-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface);border-radius:10px;margin-bottom:5px;border:1px solid var(--border)}
+.mock-reminder-item .reminder-icon{width:28px;height:28px;border-radius:8px;background:var(--sage-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mock-reminder-item .reminder-icon svg{width:14px;height:14px;stroke:var(--sage);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.mock-reminder-item .reminder-text{flex:1}
+.mock-reminder-item .reminder-title{font-size:10px;font-weight:500;color:var(--ink)}
+.mock-reminder-item .reminder-time{font-size:8px;color:var(--ink-faint)}
+.mock-reminder-item .reminder-toggle{width:28px;height:16px;border-radius:8px;background:var(--sage);position:relative;flex-shrink:0}
+.mock-reminder-item .reminder-toggle::after{content:'';position:absolute;top:2px;right:2px;width:12px;height:12px;border-radius:50%;background:#fff}
+
+/* ===== SYNC MOCK ===== */
+.mock-sync{display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 0}
+.sync-device{width:160px;background:var(--surface);border-radius:14px;padding:10px 12px;border:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sync-device-icon{width:28px;height:28px;border-radius:8px;background:var(--sage-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sync-device-icon svg{width:14px;height:14px;stroke:var(--sage);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.sync-device-name{font-size:10px;font-weight:500;color:var(--ink)}
+.sync-device-status{font-size:8px;color:var(--sage)}
+.sync-arrows{display:flex;flex-direction:column;align-items:center;gap:2px}
+.sync-arrows svg{width:20px;height:20px;stroke:var(--sage);stroke-width:2;fill:none;stroke-linecap:round;animation:pulse 2s ease-in-out infinite}
+.sync-cloud{width:48px;height:48px;border-radius:14px;background:var(--sage-soft);display:flex;align-items:center;justify-content:center;border:1.5px solid var(--sage);opacity:.6}
+.sync-cloud svg{width:24px;height:24px;stroke:var(--sage);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== WHY ZERA CARDS ===== */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:720px){
+  .why-grid{grid-template-columns:1fr}
+}
+
+/* ===== CTA ===== */
+.cta-section{padding:clamp(60px,10vh,100px) 0;text-align:center}
+.cta-section h2{font-weight:600;font-size:clamp(26px,3.5vw,40px);letter-spacing:-0.02em;margin-bottom:12px}
+.cta-section .cta-sub{font-family:var(--cursive);font-size:20px;color:var(--sage);margin-bottom:32px}
+.cta-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.cta-note{font-size:13px;color:var(--ink-faint)}
+
+/* ===== FEATURE DIVIDER ===== */
+.feature-divider{text-align:center;padding:24px 0}
+.feature-divider svg{width:32px;height:32px;stroke:var(--sage);stroke-width:1.5;fill:none;opacity:.4}
+</style>
+</head>
+<body>
+
+<div class="nav-overlay"></div>
+<nav class="site-nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-logo">Zera</a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="features.html" class="nav-link active">Features</a>
+      <a href="download.html" class="nav-link">Download</a>
+      <a href="updates.html" class="nav-link">Updates</a>
+      <a href="https://github.com/successfulyadav-hub/zera" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="page-hero">
+  <div class="wrap">
+    <p class="hero-eyebrow">everything you need</p>
+    <h1>One app. Your whole day.</h1>
+    <p class="hero-sub">Zera brings your calendar, tasks, notes, and reminders together in one calm, intentional space. No clutter. No noise. Just your day, thoughtfully designed.</p>
+  </div>
+</section>
+
+<!-- ===== FEATURE 1: TODAY VIEW ===== -->
+<section class="section">
+  <div class="wrap">
+
+    <div class="feature-row">
+      <div class="feature-text reveal-left">
+        <p class="feature-eyebrow">the central hub</p>
+        <h2>Today View</h2>
+        <p>Your day at a glance. Everything you need to see -- schedule, tasks, and notes -- lives on one calm screen. Open Zera and know exactly where your day stands.</p>
+        <ul class="feature-list">
+          <li>Timeline of upcoming events</li>
+          <li>Active tasks with progress</li>
+          <li>Pinned notes and quick capture</li>
+          <li>Gentle daily greeting</li>
+        </ul>
+      </div>
+      <div class="feature-visual reveal-right">
+        <div class="mock-phone">
+          <div class="mock-screen mock-today">
+            <div class="mock-status"><span>9:41</span><span>100%</span></div>
+            <div class="mock-day-label">Friday</div>
+            <div class="mock-day-title">September 5</div>
+            <div class="mock-greeting">make today count</div>
+            <div class="mock-section-label">Schedule</div>
+            <div class="mock-event"><span class="mock-event-time">9:00</span><div class="mock-event-bar"></div><span class="mock-event-title">Team standup</span></div>
+            <div class="mock-event"><span class="mock-event-time">2:00</span><div class="mock-event-bar" style="background:var(--warm)"></div><span class="mock-event-title">Design review</span></div>
+            <div class="mock-section-label">Tasks</div>
+            <div class="mock-task completed"><div class="mock-cb done"></div><span>Review pull request</span></div>
+            <div class="mock-task"><div class="mock-cb"></div><span>Update documentation</span></div>
+            <div class="mock-task"><div class="mock-cb"></div><span>Send weekly report</span></div>
+            <div class="mock-note-card"><div class="note-title">Project ideas</div><div class="note-body">Explore the new API for...</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FEATURE 2: CALENDAR ===== -->
+    <div class="feature-row">
+      <div class="feature-text reveal-right">
+        <p class="feature-eyebrow">see the whole picture</p>
+        <h2>Calendar</h2>
+        <p>A clean month view with subtle event dots so you always know what is ahead. Swipe to navigate months, tap a day to see its summary. Planning feels natural, not overwhelming.</p>
+        <ul class="feature-list">
+          <li>Month view with event indicators</li>
+          <li>Swipe between months</li>
+          <li>Day summary on tap</li>
+          <li>Seamless event creation</li>
+        </ul>
+      </div>
+      <div class="feature-visual reveal-left">
+        <div class="mock-phone">
+          <div class="mock-screen mock-calendar">
+            <div class="mock-status"><span>9:41</span><span>100%</span></div>
+            <div class="cal-header">
+              <span class="cal-month">September 2026</span>
+              <span class="cal-arrows">&larr; &rarr;</span>
+            </div>
+            <div class="cal-grid">
+              <span class="cal-day-name">Su</span><span class="cal-day-name">Mo</span><span class="cal-day-name">Tu</span><span class="cal-day-name">We</span><span class="cal-day-name">Th</span><span class="cal-day-name">Fr</span><span class="cal-day-name">Sa</span>
+              <span class="cal-day other-month">30</span><span class="cal-day other-month">31</span><span class="cal-day has-event">1</span><span class="cal-day">2</span><span class="cal-day has-event">3</span><span class="cal-day">4</span><span class="cal-day">5</span>
+              <span class="cal-day">6</span><span class="cal-day today has-event">7</span><span class="cal-day">8</span><span class="cal-day has-event">9</span><span class="cal-day">10</span><span class="cal-day has-event">11</span><span class="cal-day">12</span>
+              <span class="cal-day">13</span><span class="cal-day">14</span><span class="cal-day has-event">15</span><span class="cal-day">16</span><span class="cal-day">17</span><span class="cal-day has-event">18</span><span class="cal-day">19</span>
+              <span class="cal-day">20</span><span class="cal-day has-event">21</span><span class="cal-day">22</span><span class="cal-day">23</span><span class="cal-day">24</span><span class="cal-day">25</span><span class="cal-day has-event">26</span>
+              <span class="cal-day">27</span><span class="cal-day">28</span><span class="cal-day has-event">29</span><span class="cal-day">30</span><span class="cal-day other-month">1</span><span class="cal-day other-month">2</span><span class="cal-day other-month">3</span>
+            </div>
+            <div class="cal-summary">
+              <div class="cal-summary-item"><span class="cal-summary-dot"></span><span>Team standup, 9:00 AM</span></div>
+              <div class="cal-summary-item"><span class="cal-summary-dot" style="background:var(--warm)"></span><span>Design review, 2:00 PM</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FEATURE 3: TASKS ===== -->
+    <div class="feature-row">
+      <div class="feature-text reveal-left">
+        <p class="feature-eyebrow">get things done</p>
+        <h2>Tasks</h2>
+        <p>Simple, purposeful task management. Checkboxes that feel satisfying to complete. Set priorities and due times without the complexity of a full project manager.</p>
+        <ul class="feature-list">
+          <li>Simple checkboxes with priorities</li>
+          <li>Due dates and times</li>
+          <li>Satisfying completion animations</li>
+          <li>No over-engineering, just clarity</li>
+        </ul>
+      </div>
+      <div class="feature-visual reveal-right">
+        <div class="mock-phone">
+          <div class="mock-screen mock-tasks">
+            <div class="mock-status"><span>9:41</span><span>100%</span></div>
+            <div class="tasks-header">Tasks</div>
+            <div class="task-item">
+              <div class="task-priority high"></div>
+              <div class="mock-cb"></div>
+              <div class="task-content"><div class="task-name">Finish project proposal</div><div class="task-due">Due today, 5:00 PM</div></div>
+            </div>
+            <div class="task-item">
+              <div class="task-priority medium"></div>
+              <div class="mock-cb"></div>
+              <div class="task-content"><div class="task-name">Reply to design feedback</div><div class="task-due">Due tomorrow</div></div>
+            </div>
+            <div class="task-item">
+              <div class="task-priority low"></div>
+              <div class="mock-cb done"></div>
+              <div class="task-content"><div class="task-name" style="text-decoration:line-through;color:var(--ink-faint)">Review pull request</div><div class="task-due" style="color:var(--ink-faint)">Completed</div></div>
+            </div>
+            <div class="task-item">
+              <div class="task-priority low"></div>
+              <div class="mock-cb"></div>
+              <div class="task-content"><div class="task-name">Update documentation</div><div class="task-due">Due Friday</div></div>
+            </div>
+            <div class="task-item">
+              <div class="task-priority medium"></div>
+              <div class="mock-cb"></div>
+              <div class="task-content"><div class="task-name">Send weekly report</div><div class="task-due">Due Friday, 3:00 PM</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FEATURE 4: NOTES ===== -->
+    <div class="feature-row">
+      <div class="feature-text reveal-right">
+        <p class="feature-eyebrow">capture freely</p>
+        <h2>Notes</h2>
+        <p>Thoughts arrive without warning. Zera gives them a place to land. Quick capture, automatic saving, and a clean writing space so you can focus on the idea, not the tool.</p>
+        <ul class="feature-list">
+          <li>Quick capture, instant save</li>
+          <li>Clean, distraction-free writing</li>
+          <li>Organized by date automatically</li>
+          <li>Always there when inspiration strikes</li>
+        </ul>
+      </div>
+      <div class="feature-visual reveal-left">
+        <div class="mock-phone">
+          <div class="mock-screen mock-notes">
+            <div class="mock-status"><span>9:41</span><span>100%</span></div>
+            <div class="notes-header">Notes</div>
+            <div class="note-entry">
+              <div class="note-entry-title">Project ideas</div>
+              <div class="note-entry-body">Explore the new API for real-time features. Could simplify the sync layer significantly.<span class="cursor-blink"></span></div>
+              <div class="note-entry-meta">Just now</div>
+            </div>
+            <div class="note-entry">
+              <div class="note-entry-title">Meeting notes</div>
+              <div class="note-entry-body">Team agreed on the new timeline. Ship MVP by end of month. Focus on core features first.</div>
+              <div class="note-entry-meta">Yesterday, 2:30 PM</div>
+            </div>
+            <div class="note-entry">
+              <div class="note-entry-title">Reading list</div>
+              <div class="note-entry-body">Atomic Habits, Deep Work, The Art of Stillness</div>
+              <div class="note-entry-meta">Sep 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FEATURE 5: REMINDERS ===== -->
+    <div class="feature-row">
+      <div class="feature-text reveal-left">
+        <p class="feature-eyebrow">never forget</p>
+        <h2>Reminders</h2>
+        <p>Set it and let go. Zera handles the remembering so you do not have to keep it all in your head. Smart notifications that actually fire when you need them.</p>
+        <ul class="feature-list">
+          <li>Set and forget with confidence</li>
+          <li>Smart notification scheduling</li>
+          <li>Gentle, non-intrusive alerts</li>
+          <li>Recurring reminders for habits</li>
+        </ul>
+      </div>
+      <div class="feature-visual reveal-right">
+        <div class="mock-phone">
+          <div class="mock-screen">
+            <div class="mock-status"><span>9:41</span><span>100%</span></div>
+            <div class="reminders-header" style="font-weight:600;font-size:13px;margin-bottom:10px">Reminders</div>
+            <div class="mock-reminder-item">
+              <div class="reminder-icon">
+                <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </div>
+              <div class="reminder-text"><div class="reminder-title">Take medication</div><div class="reminder-time">Every day, 8:00 AM</div></div>
+              <div class="reminder-toggle"></div>
+            </div>
+            <div class="mock-reminder-item">
+              <div class="reminder-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="reminder-text"><div class="reminder-title">Team standup</div><div class="reminder-time">15 min before, 8:45 AM</div></div>
+              <div class="reminder-toggle"></div>
+            </div>
+            <div class="mock-reminder-item">
+              <div class="reminder-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="reminder-text"><div class="reminder-title">Weekly review</div><div class="reminder-time">Fridays, 4:00 PM</div></div>
+              <div class="reminder-toggle"></div>
+            </div>
+            <div class="mock-reminder-item">
+              <div class="reminder-icon">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+              <div class="reminder-text"><div class="reminder-title">Drink water</div><div class="reminder-time">Every 2 hours</div></div>
+              <div class="reminder-toggle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FEATURE 6: CLOUD SYNC ===== -->
+    <div class="feature-row">
+      <div class="feature-text reveal-right">
+        <p class="feature-eyebrow">always in sync</p>
+        <h2>Cloud Sync</h2>
+        <p>Powered by Supabase, your data follows you everywhere. Sign in once and everything syncs quietly in the background. Your planner is always up to date, on every device.</p>
+        <ul class="feature-list">
+          <li>Supabase-powered real-time sync</li>
+          <li>Works offline, syncs when connected</li>
+          <li>End-to-end encryption</li>
+          <li>Your data, your control</li>
+        </ul>
+      </div>
+      <div class="feature-visual reveal-left">
+        <div class="mock-phone">
+          <div class="mock-screen">
+            <div class="mock-status"><span>9:41</span><span>100%</span></div>
+            <div class="mock-sync">
+              <div class="sync-device">
+                <div class="sync-device-icon">
+                  <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                </div>
+                <div><div class="sync-device-name">This phone</div><div class="sync-device-status">Synced just now</div></div>
+              </div>
+              <div class="sync-arrows">
+                <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+                <svg viewBox="0 0 24 24" style="animation-delay:-1s"><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              </div>
+              <div class="sync-cloud">
+                <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+              </div>
+              <div class="sync-arrows">
+                <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+                <svg viewBox="0 0 24 24" style="animation-delay:-1s"><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              </div>
+              <div class="sync-device">
+                <div class="sync-device-icon">
+                  <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <div><div class="sync-device-name">Other devices</div><div class="sync-device-status">Synced 2 min ago</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== WHY ZERA ===== -->
+<section class="section" style="background:var(--sage-soft)">
+  <div class="wrap">
+    <div class="section-header reveal">
+      <h2>Why Zera?</h2>
+      <p>built differently, on purpose</p>
+    </div>
+    <div class="why-grid stagger">
+      <div class="card reveal">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Privacy First</h3>
+        <p>Offline-first by design. Your data stays on your device unless you choose to sync. No tracking, no analytics watching your every move.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+        </div>
+        <h3>No Distractions</h3>
+        <p>No ads. No tracking pixels. No social features competing for your attention. Just a clean tool that respects your focus and your time.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3>Built with Care</h3>
+        <p>Open source and community-driven. Every feature is considered, every interaction intentional. Built by people who believe tools should feel good to use.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <div class="wrap reveal">
+    <h2>Ready to simplify your day?</h2>
+    <p class="cta-sub">Your calm planner is waiting.</p>
+    <div class="cta-actions">
+      <a href="download.html" class="btn btn-primary btn-lg">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Zera
+      </a>
+      <a href="https://github.com/successfulyadav-hub/zera" class="btn btn-outline btn-lg" target="_blank" rel="noopener">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        View on GitHub
+      </a>
+    </div>
+    <p class="cta-note">Free and open source. No account required.</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand"><span class="footer-logo">Zera</span><p class="footer-tagline">Plant what matters. Grow your days.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="download.html">Download</a><a href="updates.html">Updates</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="https://github.com/successfulyadav-hub/zera" target="_blank" rel="noopener">GitHub</a></div>
+      <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+    <div class="footer-bottom"><span>2026 Zera</span><span>Made with intention</span></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

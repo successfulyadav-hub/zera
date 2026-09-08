@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Updates — Zera</title>
+<meta name="description" content="Every improvement, every fix. Watch Zera grow with each release.">
+<meta name="theme-color" content="#7B8F7A">
+<meta property="og:title" content="Zera Updates">
+<meta property="og:description" content="Follow Zera's growth. See what's new, what's fixed, and what's coming next.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Caveat:wght@400;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+/* ===== TIMELINE ===== */
+.timeline-section{padding:0 0 clamp(60px,10vh,100px)}
+.timeline{position:relative;max-width:720px;margin:0 auto;padding:0 0 0 48px}
+
+/* vertical vine line */
+.timeline::before{
+  content:'';position:absolute;left:18px;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--sage) 0%,var(--sage-soft) 70%,transparent 100%);
+  border-radius:2px;
+}
+
+.timeline-entry{position:relative;margin-bottom:56px}
+.timeline-entry:last-child{margin-bottom:0}
+
+/* dot / leaf circle on the line */
+.timeline-dot{
+  position:absolute;left:-48px;top:4px;width:36px;height:36px;
+  border-radius:50%;background:var(--sage-soft);border:2px solid var(--sage);
+  display:flex;align-items:center;justify-content:center;z-index:2;
+}
+.timeline-dot svg{width:16px;height:16px;stroke:var(--sage);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* coming-next dot uses a different icon */
+.timeline-entry.coming-next .timeline-dot{
+  border-style:dashed;background:var(--ground);
+}
+
+/* version badge */
+.version-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:600;letter-spacing:.02em;
+  padding:4px 14px;border-radius:100px;
+  background:var(--sage);color:#fff;margin-bottom:8px;
+}
+.timeline-entry.coming-next .version-badge{
+  background:var(--sage-soft);color:var(--sage);border:1.5px solid var(--sage);
+}
+
+.timeline-date{font-size:13px;color:var(--ink-faint);margin-bottom:4px}
+.timeline-title{font-weight:600;font-size:clamp(20px,2.5vw,24px);letter-spacing:-0.01em;margin-bottom:4px}
+.timeline-codename{font-family:var(--cursive);font-size:18px;color:var(--sage);margin-bottom:16px}
+
+/* change list */
+.change-list{list-style:none;padding:0;margin:0}
+.change-list li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:15px;color:var(--ink);line-height:1.7;
+  padding:6px 0;border-bottom:1px solid var(--border);
+}
+.change-list li:last-child{border-bottom:none}
+
+/* type badges */
+.change-type{
+  flex-shrink:0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+  padding:2px 10px;border-radius:100px;margin-top:3px;white-space:nowrap;
+}
+.change-type.new{background:var(--sage-soft);color:var(--sage)}
+.change-type.fix{background:#F5EEE0;color:#9B7B3C}
+.change-type.improved{background:#E8ECF0;color:#5E7080}
+
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .change-type.fix{background:#3A3328;color:#C9A37B}
+  :root:not([data-theme="light"]) .change-type.improved{background:#282E34;color:#8FA0B0}
+}
+:root[data-theme="dark"] .change-type.fix{background:#3A3328;color:#C9A37B}
+:root[data-theme="dark"] .change-type.improved{background:#282E34;color:#8FA0B0}
+
+/* timeline card wrapper for visual grouping */
+.timeline-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:clamp(20px,3vw,28px);
+}
+
+/* stagger animation for timeline entries */
+.timeline-entry.reveal{transition-delay:.1s}
+.timeline-entry.reveal:nth-child(2){transition-delay:.2s}
+.timeline-entry.reveal:nth-child(3){transition-delay:.3s}
+
+/* subscribe / stay updated section */
+.updates-cta{text-align:center;padding:clamp(40px,6vh,60px) 0 0}
+.updates-cta p{font-family:var(--cursive);font-size:20px;color:var(--sage);margin-bottom:20px}
+
+@media(max-width:640px){
+  .timeline{padding-left:40px}
+  .timeline::before{left:14px}
+  .timeline-dot{left:-40px;width:28px;height:28px}
+  .timeline-dot svg{width:12px;height:12px}
+  .change-list li{flex-direction:column;gap:4px}
+  .change-type{margin-top:0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .timeline-entry.reveal{
+    opacity:1!important;transform:none!important;animation:none!important;transition:none!important
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="nav-overlay"></div>
+<nav class="site-nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-logo">Zera</a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="download.html" class="nav-link">Download</a>
+      <a href="updates.html" class="nav-link active">Updates</a>
+      <a href="https://github.com/successfulyadav-hub/zera" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="hero-eyebrow">what's growing</p>
+    <h1>Updates</h1>
+    <p class="hero-sub">Every improvement, every fix. Watch Zera grow.</p>
+  </div>
+</section>
+
+<section class="timeline-section">
+  <div class="wrap">
+    <div class="timeline">
+
+      <!-- v1.0.0 -->
+      <div class="timeline-entry reveal">
+        <div class="timeline-dot">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M12 8c-2 0-3.5 1-4 3 .8-.6 1.7-.8 2.7-.6.6.1 1 .5 1.5 1 .8.8 1.7 1.6 3.8 1.6 2 0 3.5-1 4-3-.8.6-1.7.8-2.7.6-.6-.1-1-.5-1.5-1C15 8.8 14.1 8 12 8z"/></svg>
+        </div>
+        <div class="timeline-card">
+          <span class="version-badge">v1.0.0</span>
+          <div class="timeline-date">September 2026</div>
+          <div class="timeline-title">The Seed</div>
+          <div class="timeline-codename">the one where it all begins</div>
+          <ul class="change-list">
+            <li><span class="change-type new">New</span>Today view with timeline, tasks, and notes</li>
+            <li><span class="change-type new">New</span>Calendar with month navigation and event dots</li>
+            <li><span class="change-type new">New</span>Task management with priorities and due times</li>
+            <li><span class="change-type new">New</span>Quick notes with auto-save</li>
+            <li><span class="change-type new">New</span>Reminder notifications with smart scheduling</li>
+            <li><span class="change-type new">New</span>Cloud sync with Supabase</li>
+            <li><span class="change-type new">New</span>Dark mode support</li>
+            <li><span class="change-type new">New</span>Offline-first architecture</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- v0.9.0 -->
+      <div class="timeline-entry reveal">
+        <div class="timeline-dot">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <div class="timeline-card">
+          <span class="version-badge">v0.9.0</span>
+          <div class="timeline-date">August 2026</div>
+          <div class="timeline-title">First Light</div>
+          <div class="timeline-codename">a quiet beginning</div>
+          <ul class="change-list">
+            <li><span class="change-type new">New</span>Initial beta release</li>
+            <li><span class="change-type new">New</span>Core task and event management</li>
+            <li><span class="change-type new">New</span>Basic calendar view</li>
+            <li><span class="change-type new">New</span>Local SQLite storage</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Coming Next -->
+      <div class="timeline-entry coming-next reveal">
+        <div class="timeline-dot">
+          <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </div>
+        <div class="timeline-card">
+          <span class="version-badge">Coming Next</span>
+          <div class="timeline-title">New Branches</div>
+          <div class="timeline-codename">growing in new directions</div>
+          <ul class="change-list">
+            <li><span class="change-type new">New</span>iOS support</li>
+            <li><span class="change-type new">New</span>Widget system for home screen</li>
+            <li><span class="change-type improved">Improved</span>Recurring tasks</li>
+            <li><span class="change-type new">New</span>Tags and categories</li>
+            <li><span class="change-type new">New</span>Custom themes</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="updates-cta reveal">
+      <p>follow the journey on GitHub</p>
+      <a href="https://github.com/successfulyadav-hub/zera" class="btn btn-outline" target="_blank" rel="noopener">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        Star on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand"><span class="footer-logo">Zera</span><p class="footer-tagline">Plant what matters. Grow your days.</p></div>
+      <div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="download.html">Download</a><a href="updates.html">Updates</a></div>
+      <div class="footer-col"><h4>Community</h4><a href="https://github.com/successfulyadav-hub/zera" target="_blank" rel="noopener">GitHub</a></div>
+      <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+    <div class="footer-bottom"><span>2026 Zera</span><span>Made with intention</span></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
